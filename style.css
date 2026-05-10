@@ -73,6 +73,12 @@ h2 {
   gap: 12px;
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 label {
   font-weight: 700;
 }
@@ -90,6 +96,23 @@ textarea {
 textarea:focus {
   border-color: #2f7d6f;
   outline: 3px solid #d8eee9;
+}
+
+textarea.input-error {
+  border-color: #c24132;
+  background: #fff7f5;
+}
+
+textarea.input-error:focus {
+  border-color: #c24132;
+  outline: 3px solid #f7d8d4;
+}
+
+.error-message {
+  color: #b42318;
+  font-size: 14px;
+  font-weight: 700;
+  margin: -4px 0 0;
 }
 
 button {
@@ -149,11 +172,26 @@ button:hover {
 }
 
 .note-item p {
+  flex: 1;
   margin: 0;
 }
 
-.delete-button {
+.note-actions {
+  display: flex;
   flex: 0 0 auto;
+  gap: 8px;
+}
+
+.edit-button {
+  background: #3b6ea8;
+  padding: 8px 12px;
+}
+
+.edit-button:hover {
+  background: #315d8d;
+}
+
+.delete-button {
   background: #c24132;
   padding: 8px 12px;
 }
@@ -239,5 +277,17 @@ button:hover {
 
   .modal-actions button {
     width: 100%;
+  }
+
+  .note-item {
+    flex-direction: column;
+  }
+
+  .note-actions {
+    width: 100%;
+  }
+
+  .note-actions button {
+    flex: 1;
   }
 }

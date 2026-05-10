@@ -20,7 +20,12 @@
       <form id="note-form" class="note-form">
         <label for="note-input">Not metni</label>
         <textarea id="note-input" name="note" rows="4" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
-        <button type="submit">Not Ekle</button>
+        <p id="note-error" class="error-message hidden">Lutfen bir not yaz.</p>
+
+        <div class="form-actions">
+          <button id="submit-note-button" type="submit">Not Ekle</button>
+          <button id="cancel-edit-button" class="secondary-button hidden" type="button">Vazgec</button>
+        </div>
       </form>
     </section>
 

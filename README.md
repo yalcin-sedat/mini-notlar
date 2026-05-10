@@ -11,8 +11,10 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor.
 - Not yazma alani
 - Not listesi
 - Not sayaci
+- Not duzenleme
+- Ozel silme onay penceresi
 
-Sonraki asamalarda not ekleme, silme, kaydetme ve arama ozellikleri eklenecek.
+Sonraki asamalarda notlari kaydetme ve arama ozellikleri eklenecek.
 
 ## Dosyalar
 
