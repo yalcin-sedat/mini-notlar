@@ -139,6 +139,14 @@ button:hover {
   margin-bottom: 18px;
 }
 
+.notes-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 #note-count {
   color: #52616b;
   font-weight: 700;
@@ -281,6 +289,10 @@ input[type="search"]:focus {
   background: #9f3428;
 }
 
+.small-button {
+  padding: 8px 12px;
+}
+
 @media (max-width: 640px) {
   .app {
     width: min(100% - 20px, 920px);
@@ -300,6 +312,10 @@ input[type="search"]:focus {
     align-items: flex-start;
     flex-direction: column;
     gap: 4px;
+  }
+
+  .notes-tools {
+    justify-content: flex-start;
   }
 
   .modal-actions {

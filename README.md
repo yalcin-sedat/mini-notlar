@@ -18,21 +18,28 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Notlarda arama yapma
 - Notlarda olusturma ve guncelleme tarihi
 - En yeni notu en ustte gosterme
+- Tum notlari onayla temizleme
 
 ## Nasil Calistirilir
 
-Projeyi calistirmak icin `index.html` dosyasini tarayicida acman yeterli.
+Proje JavaScript module yapisi kullandigi icin VS Code icinde Live Server ile calistirilmelidir.
 
-VS Code kullaniyorsan Live Server eklentisiyle de acabilirsin.
+1. VS Code'da proje klasorunu ac.
+2. `index.html` dosyasina sag tikla.
+3. `Open with Live Server` secenegine tikla.
+
+Not: `index.html` dosyasina dogrudan cift tiklamak module dosyalarini her tarayicida calistirmayabilir.
 
 ## Dosyalar
 
 - `index.html`: Sayfa iskeleti
 - `style.css`: Tasarim
-- `script.js`: JavaScript kodlari
+- `js/app.js`: Uygulamanin ana akisi
+- `js/notes.js`: Not verisi ve tarih islemleri
+- `js/storage.js`: localStorage kayit islemleri
+- `js/ui.js`: Ekran, liste ve modal islemleri
 
 ## Sonraki Adimlar
 
 - Tasarimi daha profesyonel hale getirmek
-- Kod yapisini bolumlere ayirarak temizlemek
 - GitHub Pages ile projeyi internette yayinlamak
