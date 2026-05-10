@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Notlar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section class="app-header">
+      <p class="eyebrow">Ilk JavaScript Projem</p>
+      <h1>Mini Notlar</h1>
+      <p class="intro">Kisa notlarini yaz, listele ve daha sonra geri don.</p>
+    </section>
+
+    <section class="note-panel" aria-labelledby="new-note-title">
+      <h2 id="new-note-title">Yeni Not</h2>
+
+      <form id="note-form" class="note-form">
+        <label for="note-input">Not metni</label>
+        <textarea id="note-input" name="note" rows="4" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
+        <button type="submit">Not Ekle</button>
+      </form>
+    </section>
+
+    <section class="notes-area" aria-labelledby="notes-title">
+      <div class="notes-heading">
+        <h2 id="notes-title">Notlarim</h2>
+        <span id="note-count">0 not</span>
+      </div>
+
+      <ul id="notes-list" class="notes-list">
+        <li class="empty-state">Henuz not eklenmedi.</li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="delete-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal-box">
+      <h2 id="delete-modal-title">Not Silinsin mi?</h2>
+      <p>Bu notu silersen geri alamazsin.</p>
+
+      <div class="modal-actions">
+        <button id="cancel-delete-button" class="secondary-button" type="button">Vazgec</button>
+        <button id="confirm-delete-button" class="danger-button" type="button">Evet, Sil</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
