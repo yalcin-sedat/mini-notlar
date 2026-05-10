@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Notlar</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <main class="app">
     <section class="app-header">
@@ -20,7 +22,7 @@
       <form id="note-form" class="note-form">
         <label for="note-input">Not metni</label>
         <textarea id="note-input" name="note" rows="4" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
-        <p id="note-error" class="error-message hidden">Lutfen bir not yaz.</p>
+        <p id="note-error" class="error-message hidden">Not yazmadiniz.</p>
 
         <div class="form-actions">
           <button id="submit-note-button" type="submit">Not Ekle</button>
@@ -33,6 +35,11 @@
       <div class="notes-heading">
         <h2 id="notes-title">Notlarim</h2>
         <span id="note-count">0 not</span>
+      </div>
+
+      <div class="search-area">
+        <label for="search-input">Notlarda ara</label>
+        <input id="search-input" type="search" placeholder="Aranacak kelime...">
       </div>
 
       <ul id="notes-list" class="notes-list">

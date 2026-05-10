@@ -17,6 +17,9 @@ const noteError = document.querySelector("#note-error");
 // Notlarin ekranda gorunecegi liste alanini seciyoruz.
 const notesList = document.querySelector("#notes-list");
 
+// Notlari filtrelemek icin kullanacagimiz arama alanini seciyoruz.
+const searchInput = document.querySelector("#search-input");
+
 // Toplam not sayisini gosteren yazi alanini seciyoruz.
 const noteCount = document.querySelector("#note-count");
 
@@ -28,6 +31,10 @@ const cancelDeleteButton = document.querySelector("#cancel-delete-button");
 
 // Kullanici silmeyi kesinlestirirse tiklayacagi butonu seciyoruz.
 const confirmDeleteButton = document.querySelector("#confirm-delete-button");
+
+// localStorage icinde notlari saklamak icin kullanacagimiz anahtar adi.
+// Bu isim, tarayicinin hafizasinda notlari bulmamizi saglar.
+const storageKey = "mini-notlar-notes";
 
 // Butun notlari bu dizi icinde tutuyoruz.
 // Dizi, birden fazla veriyi sirali sekilde saklayan JavaScript yapisidir.
@@ -61,6 +68,98 @@ function clearNoteError() {
   noteError.classList.add("hidden");
 }
 
+// Bu fonksiyon notlari tarayicinin localStorage alanina kaydeder.
+function saveNotes() {
+  // localStorage sadece metin saklayabilir.
+  // Bu yuzden notes dizisini JSON.stringify ile metne ceviriyoruz.
+  localStorage.setItem(storageKey, JSON.stringify(notes));
+}
+
+// Bu fonksiyon yeni bir not nesnesi olusturur.
+function createNote(text) {
+  const now = new Date().toISOString();
+
+  return {
+    text: text,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+// Bu fonksiyon eski veya eksik not verisini yeni not yapisina uyarlar.
+function normalizeNote(note) {
+  const now = new Date().toISOString();
+
+  if (typeof note === "string") {
+    return {
+      text: note,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+
+  if (note === null || typeof note !== "object" || typeof note.text !== "string") {
+    return null;
+  }
+
+  return {
+    text: note.text,
+    createdAt: note.createdAt || now,
+    updatedAt: note.updatedAt || note.createdAt || now,
+  };
+}
+
+// Bu fonksiyon sayfa acildiginda daha once kaydedilmis notlari yukler.
+function loadNotes() {
+  // localStorage icinden daha once kaydedilmis notlari aliyoruz.
+  const savedNotes = localStorage.getItem(storageKey);
+
+  // Eger hic kayit yoksa fonksiyonu burada durduruyoruz.
+  if (savedNotes === null) {
+    return;
+  }
+
+  try {
+    // Kayitli veri metin halinde geldigi icin JSON.parse ile tekrar diziye ceviriyoruz.
+    const parsedNotes = JSON.parse(savedNotes);
+
+    if (Array.isArray(parsedNotes) === false) {
+      notes = [];
+      saveNotes();
+      return;
+    }
+
+    // Eski kayitlari ve eksik notlari yeni not yapisina uygun hale getiriyoruz.
+    notes = parsedNotes.map(normalizeNote).filter(function (note) {
+      return note !== null;
+    });
+
+    // Donusturulmus veriyi tekrar kaydediyoruz.
+    saveNotes();
+  } catch (error) {
+    // Kayit bozulduysa uygulama cokmesin diye notlari sifirliyoruz.
+    notes = [];
+    saveNotes();
+  }
+}
+
+// Bu fonksiyon tarayicinin anlayacagi ISO tarihini okunabilir hale getirir.
+function formatDate(dateText) {
+  const date = new Date(dateText);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Tarih yok";
+  }
+
+  return date.toLocaleString("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 // Bu fonksiyon not listesini ekranda yeniden olusturur.
 // Yeni not ekledigimizde veya ileride not sildigimizde bu fonksiyonu kullanacagiz.
 function renderNotes() {
@@ -68,8 +167,35 @@ function renderNotes() {
   // Boylece ekrani bastan, guncel notlara gore cizebiliriz.
   notesList.innerHTML = "";
 
+  // Arama alanina yazilan metni aliyoruz.
+  // toLowerCase(), buyuk/kucuk harf farkini ortadan kaldirir.
+  const searchText = searchInput.value.trim().toLowerCase();
+
+  // Notlari arama metnine gore filtreliyoruz.
+  // Bos arama varsa butun notlar gorunur.
+  // Burada her notla beraber asil sira numarasini da sakliyoruz.
+  // Boylece ayni metne sahip iki not olsa bile dogru notu duzenleyip silebiliriz.
+  const filteredNotes = notes
+    .map(function (note, index) {
+      return {
+        note: note,
+        index: index,
+      };
+    })
+    .filter(function (note) {
+      return note.note.text.toLowerCase().includes(searchText);
+    })
+    // Yeni eklenen notlar dizinin sonunda durur.
+    // Ekranda en yeni not en ustte gorunsun diye sadece gosterim sirasini ters ceviriyoruz.
+    .reverse();
+
   // Not sayisini ekranda guncelliyoruz.
-  noteCount.textContent = `${notes.length} not`;
+  // Arama yapiliyorsa bulunan sonucu, arama yoksa toplam not sayisini gosteriyoruz.
+  if (searchText === "") {
+    noteCount.textContent = `${notes.length} not`;
+  } else {
+    noteCount.textContent = `${filteredNotes.length} sonuc`;
+  }
 
   // Eger hic not yoksa kullaniciya bos durum mesaji gosteriyoruz.
   if (notes.length === 0) {
@@ -77,20 +203,42 @@ function renderNotes() {
     return;
   }
 
-  // notes dizisindeki her not icin ekranda bir liste elemani olusturuyoruz.
+  // Arama yapildigi halde sonuc yoksa kullaniciya bilgi veriyoruz.
+  if (filteredNotes.length === 0) {
+    notesList.innerHTML = '<li class="empty-state">Aramana uygun not bulunamadi.</li>';
+    return;
+  }
+
+  // Filtrelenmis notlar icin ekranda liste elemani olusturuyoruz.
   // index, notun listedeki sira numarasidir. Silme isleminde bu numarayi kullanacagiz.
-  notes.forEach(function (note, index) {
+  filteredNotes.forEach(function (note) {
     // Yeni bir <li> HTML elemani olusturuyoruz.
     const noteItem = document.createElement("li");
 
     // Bu elemana CSS'te yazdigimiz .note-item stilini veriyoruz.
     noteItem.className = "note-item";
 
+    // Not metnini ve tarih bilgisini tutacak bir alan olusturuyoruz.
+    const noteContent = document.createElement("div");
+
+    // Bu alana CSS'te kullanacagimiz class adini veriyoruz.
+    noteContent.className = "note-content";
+
     // Not metnini tutacak bir <p> elemani olusturuyoruz.
     const noteText = document.createElement("p");
 
     // <p> elemaninin icine kullanicinin yazdigi notu koyuyoruz.
-    noteText.textContent = note;
+    noteText.textContent = note.note.text;
+
+    // Notun tarih bilgisini gostermek icin kucuk bir metin alani olusturuyoruz.
+    const noteMeta = document.createElement("small");
+
+    // Not hic guncellenmediyse olusturma tarihini, guncellendiyse guncelleme tarihini gosteriyoruz.
+    if (note.note.createdAt === note.note.updatedAt) {
+      noteMeta.textContent = `Olusturuldu: ${formatDate(note.note.createdAt)}`;
+    } else {
+      noteMeta.textContent = `Guncellendi: ${formatDate(note.note.updatedAt)}`;
+    }
 
     // Duzenle ve Sil butonlarini yan yana tutacak bir alan olusturuyoruz.
     const noteActions = document.createElement("div");
@@ -110,7 +258,7 @@ function renderNotes() {
     // Duzenle butonuna tiklaninca startEditNote fonksiyonu calisacak.
     // Hangi notun duzenlenecegini anlamak icin index degerini gonderiyoruz.
     editButton.addEventListener("click", function () {
-      startEditNote(index);
+      startEditNote(note.index);
     });
 
     // Notu silmek icin bir buton olusturuyoruz.
@@ -125,11 +273,17 @@ function renderNotes() {
     // Sil butonuna tiklaninca deleteNote fonksiyonu calisacak.
     // Hangi notun silinmek istendigini anlamak icin index degerini gonderiyoruz.
     deleteButton.addEventListener("click", function () {
-      openDeleteModal(index);
+      openDeleteModal(note.index);
     });
 
-    // Not metnini liste elemaninin icine ekliyoruz.
-    noteItem.appendChild(noteText);
+    // Not metnini icerik alanina ekliyoruz.
+    noteContent.appendChild(noteText);
+
+    // Tarih bilgisini icerik alanina ekliyoruz.
+    noteContent.appendChild(noteMeta);
+
+    // Icerik alanini liste elemaninin icine ekliyoruz.
+    noteItem.appendChild(noteContent);
 
     // Duzenle butonunu aksiyon alaninin icine ekliyoruz.
     noteActions.appendChild(editButton);
@@ -151,7 +305,7 @@ function startEditNote(index) {
   noteIndexToEdit = index;
 
   // Secilen notun metnini ustteki textarea alanina yaziyoruz.
-  noteInput.value = notes[index];
+  noteInput.value = notes[index].text;
 
   // Ana butonun yazisini degistiriyoruz.
   submitNoteButton.textContent = "Notu Guncelle";
@@ -210,6 +364,12 @@ function confirmDeleteNote() {
   // Burada index sirasindaki 1 adet notu siliyoruz.
   notes.splice(noteIndexToDelete, 1);
 
+  // Not silindikten sonra localStorage kaydini da guncelliyoruz.
+  saveNotes();
+
+  // Bir notu duzenlerken silme yapildiysa duzenleme modunu kapatiyoruz.
+  cancelEditNote();
+
   // Not silindikten sonra ekrandaki listeyi yeniden guncelliyoruz.
   renderNotes();
 
@@ -240,14 +400,19 @@ function addNote(event) {
   // Eger noteIndexToEdit null degilse, yeni not eklemiyoruz.
   // Bunun yerine var olan notu guncelliyoruz.
   if (noteIndexToEdit !== null) {
-    notes[noteIndexToEdit] = newNote;
+    notes[noteIndexToEdit].text = newNote;
+    notes[noteIndexToEdit].updatedAt = new Date().toISOString();
+    saveNotes();
     cancelEditNote();
     renderNotes();
     return;
   }
 
-  // Yeni notu notes dizisinin sonuna ekliyoruz.
-  notes.push(newNote);
+  // Yeni notu nesne olarak notes dizisinin sonuna ekliyoruz.
+  notes.push(createNote(newNote));
+
+  // Yeni notu ekledikten sonra localStorage kaydini guncelliyoruz.
+  saveNotes();
 
   // Not eklendikten sonra yazma alanini temizliyoruz.
   noteInput.value = "";
@@ -263,6 +428,9 @@ noteForm.addEventListener("submit", addNote);
 // Kullanici yazmaya baslayinca hata mesajini temizliyoruz.
 noteInput.addEventListener("input", clearNoteError);
 
+// Kullanici arama alanina yazdikca not listesini yeniden ciziyoruz.
+searchInput.addEventListener("input", renderNotes);
+
 // Vazgec butonuna tiklaninca modal kapanacak ve not silinmeyecek.
 cancelDeleteButton.addEventListener("click", closeDeleteModal);
 
@@ -271,3 +439,9 @@ confirmDeleteButton.addEventListener("click", confirmDeleteNote);
 
 // Vazgec butonuna tiklaninca duzenleme modu kapanacak.
 cancelEditButton.addEventListener("click", cancelEditNote);
+
+// Sayfa ilk acildiginda kayitli notlari yukluyoruz.
+loadNotes();
+
+// Kayitli notlari ekranda gosteriyoruz.
+renderNotes();

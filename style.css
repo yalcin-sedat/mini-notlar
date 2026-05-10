@@ -11,6 +11,7 @@ body {
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
@@ -135,6 +136,7 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 18px;
 }
 
 #note-count {
@@ -148,6 +150,25 @@ button:hover {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.search-area {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+input[type="search"] {
+  width: 100%;
+  border: 1px solid #b9c7c2;
+  border-radius: 6px;
+  padding: 12px;
+  color: #1f2933;
+}
+
+input[type="search"]:focus {
+  border-color: #2f7d6f;
+  outline: 3px solid #d8eee9;
 }
 
 .empty-state {
@@ -171,9 +192,19 @@ button:hover {
   white-space: pre-wrap;
 }
 
-.note-item p {
+.note-content {
   flex: 1;
+}
+
+.note-content p {
   margin: 0;
+}
+
+.note-content small {
+  display: block;
+  color: #6b7c86;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 .note-actions {
