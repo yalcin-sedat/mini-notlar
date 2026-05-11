@@ -14,6 +14,7 @@ import {
   showNoteError,
   showStatusMessage,
   updateCharacterCount,
+  updateClearSearchButton,
 } from "./ui.js";
 
 // Bu dosya uygulamanin ana akisini yonetir.
@@ -26,6 +27,8 @@ let noteIndexToEdit = null;
 let shouldDeleteAllNotes = false;
 
 function updateScreen() {
+  updateClearSearchButton();
+
   renderNotes(notes, {
     onEdit: startEditNote,
     onDelete: openDeleteModal,
@@ -123,6 +126,12 @@ function handleNoteInput() {
   updateCharacterCount();
 }
 
+function clearSearch() {
+  elements.searchInput.value = "";
+  updateScreen();
+  elements.searchInput.focus();
+}
+
 function handleKeyboardShortcuts(event) {
   if (event.key !== "Escape") {
     return;
@@ -153,6 +162,7 @@ function toggleTheme() {
 elements.noteForm.addEventListener("submit", handleNoteSubmit);
 elements.noteInput.addEventListener("input", handleNoteInput);
 elements.searchInput.addEventListener("input", updateScreen);
+elements.clearSearchButton.addEventListener("click", clearSearch);
 elements.clearNotesButton.addEventListener("click", openDeleteAllModal);
 elements.cancelDeleteButton.addEventListener("click", cancelDelete);
 elements.confirmDeleteButton.addEventListener("click", confirmDelete);

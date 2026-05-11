@@ -18,6 +18,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Ozel silme onay penceresi
 - Notlari tarayicida kaydetme
 - Notlarda arama yapma
+- Arama kutusunu tek tiklamayla temizleme
 - Notlarda olusturma ve guncelleme tarihi
 - En yeni notu en ustte gosterme
 - Tum notlari onayla temizleme

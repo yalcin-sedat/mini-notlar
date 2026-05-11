@@ -12,6 +12,7 @@ Uygulama su isleri yapar:
 - Notlar duzenlenebilir.
 - Notlar tek tek veya topluca silinebilir.
 - Notlar icinde arama yapilabilir.
+- Arama kutusu tek tiklamayla temizlenebilir.
 - Notlarin olusturma ve guncelleme tarihi gosterilir.
 - Not yazarken karakter sayisi takip edilir.
 - Islem sonrasi kullaniciya kisa durum mesaji gosterilir.
@@ -45,6 +46,7 @@ Burada:
 - Basliklar
 - Not yazma formu
 - Arama kutusu
+- Arama temizleme butonu
 - Karakter sayaci
 - Tema degistirme butonu
 - Durum mesaji
@@ -114,6 +116,7 @@ Burada:
 - HTML elemanlari secilir.
 - Not listesi ekrana cizilir.
 - Hata mesaji gosterilir/gizlenir.
+- Arama temizleme butonu gosterilir/gizlenir.
 - Karakter sayisi guncellenir.
 - Durum mesaji gosterilir.
 - Modal acilir/kapanir.
@@ -231,6 +234,17 @@ Koyu Tema / Acik Tema butonuna tiklanir
       -> body elemanina dark-theme class'i eklenir veya kaldirilir
     -> saveTheme()
       -> secim localStorage alanina kaydedilir
+```
+
+Kullanici arama kutusunu temizleyince:
+
+```text
+Temizle butonuna tiklanir
+  -> clearSearch()
+    -> searchInput.value bos metin olur
+    -> updateScreen()
+      -> tum notlar tekrar gosterilir
+      -> Temizle butonu gizlenir
 ```
 
 ## Kod Bloklariyla Aciklama
@@ -761,6 +775,86 @@ Bu fonksiyon:
 - Yeni temayi tarayicida saklar.
 - Kullaniciya durum mesaji gosterir.
 
+### 24. Arama kutusunu temizleme
+
+Arama kutusunun yanina bir Temizle butonu ekledik:
+
+```html
+<button id="clear-search-button" class="secondary-button small-button hidden" type="button">Temizle</button>
+```
+
+Butonda bastan `hidden` class'i var.
+
+Bu su anlama gelir:
+
+```text
+Sayfa ilk acildiginda Temizle butonu gorunmesin.
+```
+
+`ui.js` icinde butonu sectik:
+
+```js
+clearSearchButton: document.querySelector("#clear-search-button"),
+```
+
+Sonra butonun gorunup gorunmeyecegini yoneten bir fonksiyon yazdik:
+
+```js
+export function updateClearSearchButton() {
+  if (elements.searchInput.value.trim() === "") {
+    elements.clearSearchButton.classList.add("hidden");
+    return;
+  }
+
+  elements.clearSearchButton.classList.remove("hidden");
+}
+```
+
+Bu fonksiyon:
+
+- Arama kutusu bossa Temizle butonunu gizler.
+- Arama kutusunda metin varsa Temizle butonunu gosterir.
+
+`app.js` icinde aramayi temizleyen fonksiyon:
+
+```js
+function clearSearch() {
+  elements.searchInput.value = "";
+  updateScreen();
+  elements.searchInput.focus();
+}
+```
+
+Buradaki en onemli satir:
+
+```js
+elements.searchInput.value = "";
+```
+
+Bu satir arama kutusunun icindeki metni siler.
+
+Sonra:
+
+```js
+updateScreen();
+```
+
+ile not listesi tekrar cizilir.
+
+En son:
+
+```js
+elements.searchInput.focus();
+```
+
+ile imlec tekrar arama kutusuna gider.
+
+Butona tiklandiginda bu fonksiyonun calismasi icin event listener ekledik:
+
+```js
+elements.clearSearchButton.addEventListener("click", clearSearch);
+```
+
 ## Neden Kodlari Bolduk?
 
 Baslangicta her sey tek dosyada olabilir. Ama proje buyuyunce tek dosya zorlasir.
@@ -857,6 +951,16 @@ Bir HTML elemanina class ekler veya class'i kaldirir.
 ```js
 document.body.classList.toggle("dark-theme", true);
 ```
+
+### input.value
+
+Bir input veya textarea icindeki metni okumak ya da degistirmek icin kullanilir.
+
+```js
+elements.searchInput.value = "";
+```
+
+Bu ornek arama kutusunu bosaltir.
 
 ## Ogrenme Sirasi
 

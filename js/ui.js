@@ -13,6 +13,7 @@ export const elements = {
   statusMessage: document.querySelector("#status-message"),
   notesList: document.querySelector("#notes-list"),
   searchInput: document.querySelector("#search-input"),
+  clearSearchButton: document.querySelector("#clear-search-button"),
   noteCount: document.querySelector("#note-count"),
   clearNotesButton: document.querySelector("#clear-notes-button"),
   deleteModal: document.querySelector("#delete-modal"),
@@ -116,6 +117,16 @@ export function applyTheme(theme) {
 
   elements.themeToggleButton.textContent = isDarkTheme ? "Acik Tema" : "Koyu Tema";
   elements.themeToggleButton.setAttribute("aria-pressed", String(isDarkTheme));
+}
+
+// Bu fonksiyon arama kutusu bos degilse Temizle butonunu gosterir.
+export function updateClearSearchButton() {
+  if (elements.searchInput.value.trim() === "") {
+    elements.clearSearchButton.classList.add("hidden");
+    return;
+  }
+
+  elements.clearSearchButton.classList.remove("hidden");
 }
 
 // Bu fonksiyon notlari arama metnine gore filtreler ve ekranda gosterilecek siraya sokar.
