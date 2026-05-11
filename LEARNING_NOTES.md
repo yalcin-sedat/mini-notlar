@@ -13,6 +13,7 @@ Uygulama su isleri yapar:
 - Notlar tek tek veya topluca silinebilir.
 - Notlar icinde arama yapilabilir.
 - Arama kutusu tek tiklamayla temizlenebilir.
+- Hic not yoksa daha aciklayici bos liste ekrani gosterilir.
 - Notlarin olusturma ve guncelleme tarihi gosterilir.
 - Not yazarken karakter sayisi takip edilir.
 - Islem sonrasi kullaniciya kisa durum mesaji gosterilir.
@@ -118,6 +119,7 @@ Burada:
 
 - HTML elemanlari secilir.
 - Not listesi ekrana cizilir.
+- Bos liste ve bos arama sonucu ekrani olusturulur.
 - Hata mesaji gosterilir/gizlenir.
 - Arama temizleme butonu gosterilir/gizlenir.
 - Karakter sayisi guncellenir.
@@ -469,6 +471,49 @@ elements.notesList.innerHTML = "";
 ```
 
 Sonra guncel notlara gore yeni liste olusturur.
+
+Hic not yoksa veya arama sonucunda not bulunamazsa daha aciklayici bir bos durum karti gosteriyoruz.
+
+Bu karti olusturan yardimci fonksiyon:
+
+```js
+function createEmptyState(title, message) {
+  const emptyItem = document.createElement("li");
+  emptyItem.className = "empty-state";
+
+  const emptyIcon = document.createElement("span");
+  emptyIcon.className = "empty-state-icon";
+  emptyIcon.textContent = "+";
+
+  const emptyTitle = document.createElement("strong");
+  emptyTitle.textContent = title;
+
+  const emptyMessage = document.createElement("p");
+  emptyMessage.textContent = message;
+
+  emptyItem.appendChild(emptyIcon);
+  emptyItem.appendChild(emptyTitle);
+  emptyItem.appendChild(emptyMessage);
+
+  return emptyItem;
+}
+```
+
+Burada `innerHTML` ile uzun HTML metni yazmak yerine `document.createElement` kullandik.
+
+Bu sayede:
+
+- Hangi HTML elemanini olusturdugumuz daha net gorunur.
+- Her elemana ayri ayri class ve metin verebiliriz.
+- Kod buyudukce parcalari okumak kolaylasir.
+
+Bos liste ekrani su sekilde listeye eklenir:
+
+```js
+elements.notesList.appendChild(
+  createEmptyState("Henuz not yok", "Ilk notunu yazip Not Ekle butonuna basabilirsin.")
+);
+```
 
 ### 14. Arama mantigi
 
@@ -1036,6 +1081,26 @@ function handleClick(event) {
 ```
 
 Modal disina tiklama ozelliginde, tiklanan yer modal arka plani mi diye bunu kullandik.
+
+### document.createElement
+
+JavaScript ile yeni bir HTML elemani olusturur.
+
+```js
+const emptyItem = document.createElement("li");
+```
+
+Bu ornek yeni bir `li` elemani olusturur.
+
+### appendChild
+
+Bir HTML elemanini baska bir elemanin icine ekler.
+
+```js
+emptyItem.appendChild(emptyTitle);
+```
+
+Bu ornek `emptyTitle` elemanini `emptyItem` icine koyar.
 
 ### Module
 

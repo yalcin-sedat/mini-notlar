@@ -145,6 +145,29 @@ export function updateClearSearchButton() {
   elements.clearSearchButton.classList.remove("hidden");
 }
 
+// Bu fonksiyon bos liste veya bos arama sonucu mesajini olusturur.
+function createEmptyState(title, message) {
+  const emptyItem = document.createElement("li");
+  emptyItem.className = "empty-state";
+
+  const emptyIcon = document.createElement("span");
+  emptyIcon.className = "empty-state-icon";
+  emptyIcon.textContent = "+";
+  emptyIcon.setAttribute("aria-hidden", "true");
+
+  const emptyTitle = document.createElement("strong");
+  emptyTitle.textContent = title;
+
+  const emptyMessage = document.createElement("p");
+  emptyMessage.textContent = message;
+
+  emptyItem.appendChild(emptyIcon);
+  emptyItem.appendChild(emptyTitle);
+  emptyItem.appendChild(emptyMessage);
+
+  return emptyItem;
+}
+
 // Bu fonksiyon notlari arama metnine gore filtreler ve ekranda gosterilecek siraya sokar.
 function getVisibleNotes(notes) {
   const searchText = elements.searchInput.value.trim().toLowerCase();
@@ -183,14 +206,18 @@ export function renderNotes(notes, handlers) {
 
   if (notes.length === 0) {
     elements.clearNotesButton.classList.add("hidden");
-    elements.notesList.innerHTML = '<li class="empty-state">Henuz not eklenmedi.</li>';
+    elements.notesList.appendChild(
+      createEmptyState("Henuz not yok", "Ilk notunu yazip Not Ekle butonuna basabilirsin.")
+    );
     return;
   }
 
   elements.clearNotesButton.classList.remove("hidden");
 
   if (result.visibleNotes.length === 0) {
-    elements.notesList.innerHTML = '<li class="empty-state">Aramana uygun not bulunamadi.</li>';
+    elements.notesList.appendChild(
+      createEmptyState("Sonuc bulunamadi", "Farkli bir kelime deneyebilir veya aramayi temizleyebilirsin.")
+    );
     return;
   }
 

@@ -10,6 +10,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 
 - Not yazma alani
 - Not listesi
+- Daha aciklayici bos liste ekrani
 - Not sayaci
 - Bos not uyarisi
 - Karakter sayaci
