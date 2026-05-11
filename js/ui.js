@@ -25,6 +25,7 @@ export const elements = {
 };
 
 let statusMessageTimer = null;
+let statusHideTimer = null;
 
 // Bu fonksiyon not alaninda hata mesajini gosterir.
 export function showNoteError() {
@@ -52,14 +53,29 @@ export function showStatusMessage(message, type = "success") {
     clearTimeout(statusMessageTimer);
   }
 
+  if (statusHideTimer !== null) {
+    clearTimeout(statusHideTimer);
+  }
+
   elements.statusMessage.textContent = message;
   elements.statusMessage.classList.remove("status-success", "status-danger");
   elements.statusMessage.classList.add(`status-${type}`);
   elements.statusMessage.classList.remove("hidden");
 
+  // Tarayici once hidden class'inin kalktigini gorsun.
+  // Sonra status-visible eklenince CSS gecisi calisir.
+  requestAnimationFrame(function () {
+    elements.statusMessage.classList.add("status-visible");
+  });
+
   statusMessageTimer = setTimeout(function () {
-    elements.statusMessage.classList.add("hidden");
+    elements.statusMessage.classList.remove("status-visible");
     statusMessageTimer = null;
+
+    statusHideTimer = setTimeout(function () {
+      elements.statusMessage.classList.add("hidden");
+      statusHideTimer = null;
+    }, 200);
   }, 5000);
 }
 

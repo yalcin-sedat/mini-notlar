@@ -16,6 +16,7 @@ Uygulama su isleri yapar:
 - Notlarin olusturma ve guncelleme tarihi gosterilir.
 - Not yazarken karakter sayisi takip edilir.
 - Islem sonrasi kullaniciya kisa durum mesaji gosterilir.
+- Durum mesaji animasyonla acilip kapanir.
 - Escape tusu ile modal veya duzenleme modu kapatilabilir.
 - Kullanici koyu veya acik tema secebilir.
 - Tema tercihi tarayicida saklanir.
@@ -50,6 +51,7 @@ Burada:
 - Karakter sayaci
 - Tema degistirme butonu
 - Durum mesaji
+- Durum mesaji animasyonu
 - Notlarin gosterilecegi liste
 - Silme onay penceresi
 - JavaScript baglantisi
@@ -540,15 +542,28 @@ export function showStatusMessage(message, type = "success") {
     clearTimeout(statusMessageTimer);
   }
 
+  if (statusHideTimer !== null) {
+    clearTimeout(statusHideTimer);
+  }
+
   elements.statusMessage.textContent = message;
   elements.statusMessage.classList.remove("status-success", "status-danger");
   elements.statusMessage.classList.add(`status-${type}`);
   elements.statusMessage.classList.remove("hidden");
 
+  requestAnimationFrame(function () {
+    elements.statusMessage.classList.add("status-visible");
+  });
+
   statusMessageTimer = setTimeout(function () {
-    elements.statusMessage.classList.add("hidden");
+    elements.statusMessage.classList.remove("status-visible");
     statusMessageTimer = null;
-  }, 6000);
+
+    statusHideTimer = setTimeout(function () {
+      elements.statusMessage.classList.add("hidden");
+      statusHideTimer = null;
+    }, 200);
+  }, 5000);
 }
 ```
 
@@ -557,8 +572,9 @@ Bu fonksiyon:
 - Daha once baslamis bir zamanlayici varsa temizler.
 - Mesaj metnini gunceller.
 - `hidden` class'ini kaldirir.
-- Mesajin ekranda gorunmesini saglar.
-- 5 saniye sonra mesaji tekrar gizler.
+- `status-visible` class'i ile mesajin animasyonla gorunmesini saglar.
+- 5 saniye sonra `status-visible` class'ini kaldirir.
+- Animasyon bittikten sonra `hidden` class'i ile mesaji tamamen gizler.
 
 Ornek kullanim:
 
@@ -587,6 +603,46 @@ setTimeout(function () {
 `setTimeout`, bir kodu belirli bir sure sonra calistirir.
 
 `5000` milisaniyedir. Yani 5 saniye demektir.
+
+Toast animasyonu icin CSS tarafinda sunlari kullandik:
+
+```css
+.status-message {
+  opacity: 0;
+  transform: translate(-50%, -10px);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.status-message.status-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+```
+
+Bu kodda:
+
+- `opacity: 0` mesaji gorunmez yapar.
+- `opacity: 1` mesaji gorunur yapar.
+- `transform` mesaji biraz yukaridan getirir.
+- `transition` bu degisimin bir anda degil, yumusak olmasini saglar.
+
+Burada kullandigimiz yeni kavram:
+
+```js
+requestAnimationFrame(function () {
+  elements.statusMessage.classList.add("status-visible");
+});
+```
+
+`requestAnimationFrame`, tarayici ekrani tekrar cizmeden hemen once kod calistirmamizi saglar.
+
+Bu projede bunu su nedenle kullandik:
+
+```text
+Once hidden class'i kalksin.
+Sonra status-visible class'i eklensin.
+Boylece tarayici iki durumu ayri ayri gorur ve animasyon calisir.
+```
 
 ### 18. Klavye kisayolu
 
@@ -961,6 +1017,37 @@ elements.searchInput.value = "";
 ```
 
 Bu ornek arama kutusunu bosaltir.
+
+### transition
+
+CSS'te bir degisimin yumusak olmasini saglar.
+
+```css
+transition: opacity 200ms ease;
+```
+
+Bu ornek, `opacity` degisiminin 200 milisaniyede olmasini saglar.
+
+### opacity
+
+Bir elemanin gorunurlugunu belirler.
+
+```css
+opacity: 0;
+opacity: 1;
+```
+
+`0` gorunmez, `1` tamamen gorunur demektir.
+
+### transform
+
+Bir elemani hareket ettirmek, dondurmek veya olceklendirmek icin kullanilir.
+
+```css
+transform: translate(-50%, -10px);
+```
+
+Bu ornek elemani yatayda kendi genisliginin yarisi kadar sola, dikeyde 10 piksel yukari tasir.
 
 ## Ogrenme Sirasi
 

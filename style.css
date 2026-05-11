@@ -124,12 +124,20 @@ h2 {
   box-shadow: 0 16px 40px var(--toast-shadow);
   font-weight: 700;
   max-width: min(360px, calc(100% - 32px));
+  opacity: 0;
   padding: 12px 14px;
+  pointer-events: none;
   position: fixed;
   left: 50%;
   top: 16px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -10px);
+  transition: opacity 200ms ease, transform 200ms ease;
   z-index: 10;
+}
+
+.status-message.status-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 .status-success {

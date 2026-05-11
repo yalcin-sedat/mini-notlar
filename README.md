@@ -14,6 +14,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Bos not uyarisi
 - Karakter sayaci
 - Islem sonrasi durum mesaji
+- Animasyonlu durum mesaji
 - Not duzenleme
 - Ozel silme onay penceresi
 - Notlari tarayicida kaydetme
