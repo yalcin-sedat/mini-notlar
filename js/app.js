@@ -5,11 +5,13 @@ import {
   clearNoteError,
   closeDeleteModal,
   elements,
+  getSelectedColor,
   hideEditMode,
   isDeleteModalOpen,
   openClearNotesModal,
   openSingleDeleteModal,
   renderNotes,
+  selectColor,
   showEditMode,
   showNoteError,
   showStatusMessage,
@@ -44,6 +46,7 @@ function saveAndRender() {
 function startEditNote(index) {
   noteIndexToEdit = index;
   showEditMode(notes[index].text);
+  selectColor(notes[index].color);
 }
 
 function cancelEditNote() {
@@ -109,6 +112,7 @@ function handleNoteSubmit(event) {
   event.preventDefault();
 
   const newNoteText = elements.noteInput.value.trim();
+  const selectedColor = getSelectedColor();
 
   if (newNoteText === "") {
     showNoteError();
@@ -119,6 +123,7 @@ function handleNoteSubmit(event) {
 
   if (noteIndexToEdit !== null) {
     notes[noteIndexToEdit].text = newNoteText;
+    notes[noteIndexToEdit].color = selectedColor;
     notes[noteIndexToEdit].updatedAt = new Date().toISOString();
     cancelEditNote();
     saveAndRender();
@@ -126,8 +131,9 @@ function handleNoteSubmit(event) {
     return;
   }
 
-  notes.push(createNote(newNoteText));
+  notes.push(createNote(newNoteText, selectedColor));
   elements.noteInput.value = "";
+  selectColor("green");
   updateCharacterCount();
   saveAndRender();
   showStatusMessage("Not eklendi.");

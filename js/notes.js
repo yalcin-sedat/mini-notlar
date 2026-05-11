@@ -1,12 +1,23 @@
 // Bu dosya not verisinin nasil olusturuldugunu ve duzenlendigini bilir.
 // Ekranla veya localStorage ile ilgilenmez.
 
+const allowedColors = ["green", "blue", "red"];
+
+function normalizeColor(color) {
+  if (allowedColors.includes(color)) {
+    return color;
+  }
+
+  return "green";
+}
+
 // Bu fonksiyon yeni bir not nesnesi olusturur.
-export function createNote(text) {
+export function createNote(text, color = "green") {
   const now = new Date().toISOString();
 
   return {
     text: text,
+    color: normalizeColor(color),
     isPinned: false,
     createdAt: now,
     updatedAt: now,
@@ -20,6 +31,7 @@ export function normalizeNote(note) {
   if (typeof note === "string") {
     return {
       text: note,
+      color: "green",
       isPinned: false,
       createdAt: now,
       updatedAt: now,
@@ -32,6 +44,7 @@ export function normalizeNote(note) {
 
   return {
     text: note.text,
+    color: normalizeColor(note.color),
     isPinned: note.isPinned === true,
     createdAt: note.createdAt || now,
     updatedAt: note.updatedAt || note.createdAt || now,

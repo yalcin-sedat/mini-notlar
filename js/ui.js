@@ -16,6 +16,7 @@ export const elements = {
   cancelEditButton: document.querySelector("#cancel-edit-button"),
   noteError: document.querySelector("#note-error"),
   characterCount: document.querySelector("#character-count"),
+  colorInputs: document.querySelectorAll('input[name="note-color"]'),
   statusMessage: document.querySelector("#status-message"),
   notesList: document.querySelector("#notes-list"),
   searchInput: document.querySelector("#search-input"),
@@ -51,6 +52,29 @@ export function updateCharacterCount() {
   const currentLength = elements.noteInput.value.length;
 
   elements.characterCount.textContent = `${currentLength} / ${maxLength}`;
+}
+
+// Bu fonksiyon formda secili olan renk etiketini okur.
+export function getSelectedColor() {
+  const selectedColorInput = document.querySelector('input[name="note-color"]:checked');
+
+  if (selectedColorInput === null) {
+    return "green";
+  }
+
+  return selectedColorInput.value;
+}
+
+// Bu fonksiyon formdaki renk etiketlerinden birini secer.
+export function selectColor(color) {
+  const colorInput = document.querySelector(`input[name="note-color"][value="${color}"]`);
+
+  if (colorInput === null) {
+    elements.colorInputs[0].checked = true;
+    return;
+  }
+
+  colorInput.checked = true;
 }
 
 // Bu fonksiyon kullaniciya kisa durum mesaji gosterir.
@@ -98,6 +122,7 @@ export function showEditMode(noteText) {
 export function hideEditMode() {
   elements.noteInput.value = "";
   clearNoteError();
+  selectColor("green");
   setButtonInfo(elements.submitNoteButton, "Not ekle", "+");
   elements.cancelEditButton.classList.add("hidden");
   updateCharacterCount();
@@ -239,7 +264,7 @@ export function renderNotes(notes, handlers) {
 
   result.visibleNotes.forEach(function (item) {
     const noteItem = document.createElement("li");
-    noteItem.className = "note-item";
+    noteItem.className = `note-item note-color-${item.note.color}`;
 
     const noteContent = document.createElement("div");
     noteContent.className = "note-content";

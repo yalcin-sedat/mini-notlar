@@ -163,6 +163,57 @@ h2 {
   gap: 10px;
 }
 
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.color-picker legend {
+  width: 100%;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+
+.color-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+
+.color-option input {
+  accent-color: var(--color-accent);
+}
+
+.color-option span::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  margin-right: 6px;
+}
+
+.color-option-green {
+  --color-accent: #2f7d6f;
+}
+
+.color-option-blue {
+  --color-accent: #3b6ea8;
+}
+
+.color-option-red {
+  --color-accent: #c24132;
+}
+
 .input-info {
   display: flex;
   align-items: center;
@@ -352,9 +403,20 @@ input[type="search"]:focus {
   white-space: pre-wrap;
 }
 
+.note-color-green {
+  box-shadow: inset 4px 0 0 #2f7d6f;
+}
+
+.note-color-blue {
+  box-shadow: inset 4px 0 0 #3b6ea8;
+}
+
+.note-color-red {
+  box-shadow: inset 4px 0 0 #c24132;
+}
+
 .note-item-pinned {
   border-color: var(--primary-color);
-  box-shadow: inset 4px 0 0 var(--primary-color);
 }
 
 .note-content {

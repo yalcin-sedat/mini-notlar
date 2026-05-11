@@ -20,6 +20,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Not duzenleme
 - Not sabitleme
 - Sabitlenen notlari en ustte gosterme
+- Notlara renk etiketi verme
 - Ozel silme onay penceresi
 - Notlari tarayicida kaydetme
 - Notlarda arama yapma

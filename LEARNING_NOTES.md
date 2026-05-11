@@ -13,6 +13,7 @@ Uygulama su isleri yapar:
 - Notlar duzenlenebilir.
 - Notlar sabitlenebilir.
 - Sabitlenen notlar en ustte gosterilir.
+- Notlara renk etiketi verilebilir.
 - Notlar tek tek veya topluca silinebilir.
 - Notlar icinde arama yapilabilir.
 - Arama kutusu tek tiklamayla temizlenebilir.
@@ -54,6 +55,7 @@ Burada:
 - Arama kutusu
 - Arama temizleme butonu
 - Karakter sayaci
+- Renk etiketi secimi
 - Tema degistirme butonu
 - Ikonlu butonlar
 - Durum mesaji
@@ -93,6 +95,7 @@ Burada:
 - Kullanici olaylari dinlenir.
 - Not ekleme, silme, duzenleme ve tumunu temizleme akisi yonetilir.
 - Not sabitleme akisi yonetilir.
+- Not eklerken ve duzenlerken secilen renk etiketi kaydedilir.
 - Diger dosyalardan gelen fonksiyonlar birlestirilir.
 
 ### `js/notes.js`
@@ -104,6 +107,7 @@ Burada:
 - Yeni not nesnesi olusturulur.
 - Eski not verisi yeni yapıya uyarlanir.
 - Notun sabitli olup olmadigi tutulur.
+- Notun renk etiketi tutulur.
 - Tarihler okunabilir hale getirilir.
 
 ### `js/storage.js`
@@ -322,10 +326,21 @@ Ornek:
 ```js
 {
   text: "Alisveris yap",
+  color: "green",
   isPinned: false,
   createdAt: "2026-05-11T10:00:00.000Z",
   updatedAt: "2026-05-11T10:00:00.000Z"
 }
+```
+
+`color` notun renk etiketini tutar.
+
+Bu projede simdilik uc renk var:
+
+```text
+green
+blue
+red
 ```
 
 `isPinned` notun sabitlenip sabitlenmedigini tutar.
@@ -600,7 +615,69 @@ Kayitli notta isPinned true ise true kullan.
 Diger her durumda false kullan.
 ```
 
-### 16. Karakter sayaci
+### 16. Notlara renk etiketi verme
+
+HTML tarafinda renk secmek icin `radio` inputlari ekledik:
+
+```html
+<input type="radio" name="note-color" value="green" checked>
+<input type="radio" name="note-color" value="blue">
+<input type="radio" name="note-color" value="red">
+```
+
+Burada:
+
+```text
+type="radio" = ayni gruptan tek secim yapilir
+name="note-color" = bu inputlar ayni gruptadir
+checked = sayfa acilinca varsayilan secim
+```
+
+Secili rengi okumak icin `ui.js` icinde su fonksiyonu yazdik:
+
+```js
+export function getSelectedColor() {
+  const selectedColorInput = document.querySelector('input[name="note-color"]:checked');
+
+  if (selectedColorInput === null) {
+    return "green";
+  }
+
+  return selectedColorInput.value;
+}
+```
+
+Not eklerken secili rengi `createNote()` fonksiyonuna gonderiyoruz:
+
+```js
+notes.push(createNote(newNoteText, selectedColor));
+```
+
+Not duzenlerken de var olan notun rengini guncelliyoruz:
+
+```js
+notes[noteIndexToEdit].color = selectedColor;
+```
+
+Eski notlarda `color` alani olmayabilir.
+
+Bu yuzden `notes.js` icinde rengi guvenli hale getiren bir fonksiyon yazdik:
+
+```js
+function normalizeColor(color) {
+  if (allowedColors.includes(color)) {
+    return color;
+  }
+
+  return "green";
+}
+```
+
+Bu fonksiyon sadece izin verdigimiz renkleri kabul eder.
+
+Kayitli renk yoksa veya hataliysa varsayilan olarak `green` kullanilir.
+
+### 17. Karakter sayaci
 
 HTML tarafinda not yazma alanina `maxlength` ekledik:
 
@@ -635,7 +712,7 @@ elements.noteInput.addEventListener("input", handleNoteInput);
 
 Yani her karakter yazildiginda hem hata mesaji temizlenir hem de sayac guncellenir.
 
-### 17. Durum mesaji
+### 18. Durum mesaji
 
 Kullanicinin yaptigi islemden sonra ekranda kisa bilgi gosteriyoruz.
 
@@ -755,7 +832,7 @@ Sonra status-visible class'i eklensin.
 Boylece tarayici iki durumu ayri ayri gorur ve animasyon calisir.
 ```
 
-### 18. Klavye kisayolu
+### 19. Klavye kisayolu
 
 Kullanicinin `Escape` tusuna bastigini anlamak icin `keydown` olayini dinliyoruz:
 
@@ -826,7 +903,7 @@ event.target baska bir eleman olur.
 
 Bu sayede modal kutusunun icine tiklayinca modal kapanmaz, sadece dis alana tiklayinca kapanir.
 
-### 19. CSS degiskenleri
+### 20. CSS degiskenleri
 
 Tema eklemek icin renkleri tek tek her yerde degistirmek yerine CSS degiskenleri kullandik.
 
@@ -867,7 +944,7 @@ body.dark-theme {
 
 Boylece `body` elemaninda `dark-theme` class'i varsa renkler otomatik degisir.
 
-### 20. Tema butonu
+### 21. Tema butonu
 
 HTML tarafina tema degistirmek icin bir buton ekledik:
 
@@ -887,7 +964,7 @@ Boylece `app.js` icinde butona tiklanma olayini dinleyebiliriz:
 elements.themeToggleButton.addEventListener("click", toggleTheme);
 ```
 
-### 21. classList.toggle
+### 22. classList.toggle
 
 Tema class'ini eklemek veya kaldirmak icin `classList.toggle` kullandik.
 
@@ -904,7 +981,7 @@ isDarkTheme false ise dark-theme class'i kaldirilir.
 
 Yani manuel olarak iki ayri `if` yazmadan temayi ekrana uygulamis oluruz.
 
-### 22. Tema bilgisini kaydetme
+### 23. Tema bilgisini kaydetme
 
 Notlari kaydettigimiz gibi tema tercihini de `localStorage` icinde sakladik.
 
@@ -936,7 +1013,7 @@ Eger kayitli tema `dark` ise koyu tema gelir.
 
 Kayit yoksa uygulama acik tema ile baslar.
 
-### 23. Tema akisini app.js yonetir
+### 24. Tema akisini app.js yonetir
 
 `app.js` icinde sayfa ilk acildiginda tema yuklenir:
 
@@ -974,7 +1051,7 @@ Bu fonksiyon:
 - Yeni temayi tarayicida saklar.
 - Kullaniciya durum mesaji gosterir.
 
-### 24. Arama kutusunu temizleme
+### 25. Arama kutusunu temizleme
 
 Arama kutusunun yanina bir Temizle butonu ekledik:
 
@@ -1054,7 +1131,7 @@ Butona tiklandiginda bu fonksiyonun calismasi icin event listener ekledik:
 elements.clearSearchButton.addEventListener("click", clearSearch);
 ```
 
-### 25. Butonlari ikonlara cevirme
+### 26. Butonlari ikonlara cevirme
 
 Butonlarda uzun metin yerine kisa ikonlar kullandik.
 
