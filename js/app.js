@@ -1,6 +1,7 @@
 import { createNote } from "./notes.js";
-import { loadNotes, saveNotes } from "./storage.js";
+import { loadNotes, loadTheme, saveNotes, saveTheme } from "./storage.js";
 import {
+  applyTheme,
   clearNoteError,
   closeDeleteModal,
   elements,
@@ -19,6 +20,7 @@ import {
 // Veriyi tutar, kullanici olaylarini dinler ve diger dosyalardaki fonksiyonlari birlestirir.
 
 let notes = loadNotes();
+let currentTheme = loadTheme();
 let noteIndexToDelete = null;
 let noteIndexToEdit = null;
 let shouldDeleteAllNotes = false;
@@ -136,6 +138,18 @@ function handleKeyboardShortcuts(event) {
   }
 }
 
+function toggleTheme() {
+  if (currentTheme === "dark") {
+    currentTheme = "light";
+  } else {
+    currentTheme = "dark";
+  }
+
+  applyTheme(currentTheme);
+  saveTheme(currentTheme);
+  showStatusMessage("Tema tercihi kaydedildi.");
+}
+
 elements.noteForm.addEventListener("submit", handleNoteSubmit);
 elements.noteInput.addEventListener("input", handleNoteInput);
 elements.searchInput.addEventListener("input", updateScreen);
@@ -143,7 +157,9 @@ elements.clearNotesButton.addEventListener("click", openDeleteAllModal);
 elements.cancelDeleteButton.addEventListener("click", cancelDelete);
 elements.confirmDeleteButton.addEventListener("click", confirmDelete);
 elements.cancelEditButton.addEventListener("click", cancelEditNote);
+elements.themeToggleButton.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", handleKeyboardShortcuts);
 
+applyTheme(currentTheme);
 updateCharacterCount();
 updateScreen();

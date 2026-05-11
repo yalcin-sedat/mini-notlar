@@ -16,6 +16,8 @@ Uygulama su isleri yapar:
 - Not yazarken karakter sayisi takip edilir.
 - Islem sonrasi kullaniciya kisa durum mesaji gosterilir.
 - Escape tusu ile modal veya duzenleme modu kapatilabilir.
+- Kullanici koyu veya acik tema secebilir.
+- Tema tercihi tarayicida saklanir.
 
 ## Dosya Yapisi
 
@@ -44,6 +46,7 @@ Burada:
 - Not yazma formu
 - Arama kutusu
 - Karakter sayaci
+- Tema degistirme butonu
 - Durum mesaji
 - Notlarin gosterilecegi liste
 - Silme onay penceresi
@@ -58,6 +61,8 @@ Sayfanin gorunumunu belirler.
 Burada:
 
 - Renkler
+- CSS degiskenleri
+- Koyu/acik tema renkleri
 - Bosluklar
 - Buton stilleri
 - Not kartlari
@@ -95,7 +100,9 @@ Tarayicinin `localStorage` alanini yonetir.
 Burada:
 
 - Notlar kaydedilir.
+- Tema tercihi kaydedilir.
 - Sayfa acildiginda eski notlar geri yuklenir.
+- Sayfa acildiginda kayitli tema geri yuklenir.
 - Bozuk veri varsa uygulama korunur.
 
 ### `js/ui.js`
@@ -111,6 +118,7 @@ Burada:
 - Durum mesaji gosterilir.
 - Modal acilir/kapanir.
 - Duzenleme modu ekranda gosterilir.
+- Secilen tema ekrana uygulanir.
 
 ## Dosyalar Birbirine Nasil Baglaniyor?
 
@@ -211,6 +219,18 @@ Sil butonuna tiklanir
           -> not diziden silinir
           -> saveNotes()
           -> updateScreen()
+```
+
+Kullanici tema degistirince:
+
+```text
+Koyu Tema / Acik Tema butonuna tiklanir
+  -> toggleTheme()
+    -> currentTheme degisir
+    -> applyTheme()
+      -> body elemanina dark-theme class'i eklenir veya kaldirilir
+    -> saveTheme()
+      -> secim localStorage alanina kaydedilir
 ```
 
 ## Kod Bloklariyla Aciklama
@@ -593,6 +613,154 @@ Bu kod:
 - Silme penceresi aciksa pencereyi kapatir.
 - Duzenleme modundaysa duzenlemeyi iptal eder.
 
+### 19. CSS degiskenleri
+
+Tema eklemek icin renkleri tek tek her yerde degistirmek yerine CSS degiskenleri kullandik.
+
+```css
+:root {
+  --page-background: #f4f7f6;
+  --text-color: #1f2933;
+  --panel-background: #ffffff;
+}
+```
+
+`:root`, sayfanin en ust seviyesi gibi dusunulebilir.
+
+Burada tanimlanan degiskenleri baska yerlerde soyle kullaniriz:
+
+```css
+body {
+  background: var(--page-background);
+  color: var(--text-color);
+}
+```
+
+`var(--page-background)` su anlama gelir:
+
+```text
+page-background degiskenindeki rengi kullan.
+```
+
+Koyu tema icin ayni degiskenlere yeni degerler verdik:
+
+```css
+body.dark-theme {
+  --page-background: #111827;
+  --text-color: #f9fafb;
+  --panel-background: #1f2937;
+}
+```
+
+Boylece `body` elemaninda `dark-theme` class'i varsa renkler otomatik degisir.
+
+### 20. Tema butonu
+
+HTML tarafina tema degistirmek icin bir buton ekledik:
+
+```html
+<button id="theme-toggle-button" class="theme-button" type="button" aria-pressed="false">Koyu Tema</button>
+```
+
+Bu butonu JavaScript tarafinda secmek icin `ui.js` icindeki `elements` nesnesine ekledik:
+
+```js
+themeToggleButton: document.querySelector("#theme-toggle-button"),
+```
+
+Boylece `app.js` icinde butona tiklanma olayini dinleyebiliriz:
+
+```js
+elements.themeToggleButton.addEventListener("click", toggleTheme);
+```
+
+### 21. classList.toggle
+
+Tema class'ini eklemek veya kaldirmak icin `classList.toggle` kullandik.
+
+```js
+document.body.classList.toggle("dark-theme", isDarkTheme);
+```
+
+Bu kullanimda ikinci parametre cok onemlidir:
+
+```text
+isDarkTheme true ise dark-theme class'i eklenir.
+isDarkTheme false ise dark-theme class'i kaldirilir.
+```
+
+Yani manuel olarak iki ayri `if` yazmadan temayi ekrana uygulamis oluruz.
+
+### 22. Tema bilgisini kaydetme
+
+Notlari kaydettigimiz gibi tema tercihini de `localStorage` icinde sakladik.
+
+`storage.js` icinde iki yeni fonksiyon var:
+
+```js
+export function saveTheme(theme) {
+  localStorage.setItem(themeStorageKey, theme);
+}
+```
+
+Bu fonksiyon secili temayi kaydeder.
+
+```js
+export function loadTheme() {
+  const savedTheme = localStorage.getItem(themeStorageKey);
+
+  if (savedTheme === "dark") {
+    return "dark";
+  }
+
+  return "light";
+}
+```
+
+Bu fonksiyon sayfa acildiginda kayitli temayi okur.
+
+Eger kayitli tema `dark` ise koyu tema gelir.
+
+Kayit yoksa uygulama acik tema ile baslar.
+
+### 23. Tema akisini app.js yonetir
+
+`app.js` icinde sayfa ilk acildiginda tema yuklenir:
+
+```js
+let currentTheme = loadTheme();
+```
+
+Sonra ekran ilk hazirlanirken tema uygulanir:
+
+```js
+applyTheme(currentTheme);
+```
+
+Butona tiklaninca bu fonksiyon calisir:
+
+```js
+function toggleTheme() {
+  if (currentTheme === "dark") {
+    currentTheme = "light";
+  } else {
+    currentTheme = "dark";
+  }
+
+  applyTheme(currentTheme);
+  saveTheme(currentTheme);
+  showStatusMessage("Tema tercihi kaydedildi.");
+}
+```
+
+Bu fonksiyon:
+
+- Mevcut tema koyuysa acik yapar.
+- Mevcut tema aciksa koyu yapar.
+- Yeni temayi ekrana uygular.
+- Yeni temayi tarayicida saklar.
+- Kullaniciya durum mesaji gosterir.
+
 ## Neden Kodlari Bolduk?
 
 Baslangicta her sey tek dosyada olabilir. Ama proje buyuyunce tek dosya zorlasir.
@@ -671,6 +839,23 @@ Kodlari farkli dosyalara bolmeye yarar.
 ```js
 export function createNote() {}
 import { createNote } from "./notes.js";
+```
+
+### CSS Degiskeni
+
+Bir rengi veya degeri isim vererek saklar.
+
+```css
+--text-color: #1f2933;
+color: var(--text-color);
+```
+
+### classList.toggle
+
+Bir HTML elemanina class ekler veya class'i kaldirir.
+
+```js
+document.body.classList.toggle("dark-theme", true);
 ```
 
 ## Ogrenme Sirasi

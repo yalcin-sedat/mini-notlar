@@ -20,6 +20,7 @@ export const elements = {
   deleteModalText: document.querySelector("#delete-modal p"),
   cancelDeleteButton: document.querySelector("#cancel-delete-button"),
   confirmDeleteButton: document.querySelector("#confirm-delete-button"),
+  themeToggleButton: document.querySelector("#theme-toggle-button"),
 };
 
 let statusMessageTimer = null;
@@ -103,6 +104,18 @@ export function closeDeleteModal() {
 // Bu fonksiyon silme modalinin acik olup olmadigini soyler.
 export function isDeleteModalOpen() {
   return elements.deleteModal.classList.contains("hidden") === false;
+}
+
+// Bu fonksiyon secilen temayi body elemanina uygular.
+export function applyTheme(theme) {
+  const isDarkTheme = theme === "dark";
+
+  // classList.toggle ikinci parametre alinca daha kontrollu calisir.
+  // true ise class eklenir, false ise class kaldirilir.
+  document.body.classList.toggle("dark-theme", isDarkTheme);
+
+  elements.themeToggleButton.textContent = isDarkTheme ? "Acik Tema" : "Koyu Tema";
+  elements.themeToggleButton.setAttribute("aria-pressed", String(isDarkTheme));
 }
 
 // Bu fonksiyon notlari arama metnine gore filtreler ve ekranda gosterilecek siraya sokar.
