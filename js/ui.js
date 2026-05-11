@@ -9,6 +9,8 @@ export const elements = {
   submitNoteButton: document.querySelector("#submit-note-button"),
   cancelEditButton: document.querySelector("#cancel-edit-button"),
   noteError: document.querySelector("#note-error"),
+  characterCount: document.querySelector("#character-count"),
+  statusMessage: document.querySelector("#status-message"),
   notesList: document.querySelector("#notes-list"),
   searchInput: document.querySelector("#search-input"),
   noteCount: document.querySelector("#note-count"),
@@ -19,6 +21,8 @@ export const elements = {
   cancelDeleteButton: document.querySelector("#cancel-delete-button"),
   confirmDeleteButton: document.querySelector("#confirm-delete-button"),
 };
+
+let statusMessageTimer = null;
 
 // Bu fonksiyon not alaninda hata mesajini gosterir.
 export function showNoteError() {
@@ -32,11 +36,37 @@ export function clearNoteError() {
   elements.noteError.classList.add("hidden");
 }
 
+// Bu fonksiyon not yazma alanindaki karakter sayisini gunceller.
+export function updateCharacterCount() {
+  const maxLength = elements.noteInput.getAttribute("maxlength");
+  const currentLength = elements.noteInput.value.length;
+
+  elements.characterCount.textContent = `${currentLength} / ${maxLength}`;
+}
+
+// Bu fonksiyon kullaniciya kisa durum mesaji gosterir.
+export function showStatusMessage(message, type = "success") {
+  if (statusMessageTimer !== null) {
+    clearTimeout(statusMessageTimer);
+  }
+
+  elements.statusMessage.textContent = message;
+  elements.statusMessage.classList.remove("status-success", "status-danger");
+  elements.statusMessage.classList.add(`status-${type}`);
+  elements.statusMessage.classList.remove("hidden");
+
+  statusMessageTimer = setTimeout(function () {
+    elements.statusMessage.classList.add("hidden");
+    statusMessageTimer = null;
+  }, 5000);
+}
+
 // Bu fonksiyon duzenleme modunu ekranda baslatir.
 export function showEditMode(noteText) {
   elements.noteInput.value = noteText;
   elements.submitNoteButton.textContent = "Notu Guncelle";
   elements.cancelEditButton.classList.remove("hidden");
+  updateCharacterCount();
   elements.noteInput.focus();
 }
 
@@ -46,6 +76,7 @@ export function hideEditMode() {
   clearNoteError();
   elements.submitNoteButton.textContent = "Not Ekle";
   elements.cancelEditButton.classList.add("hidden");
+  updateCharacterCount();
 }
 
 // Bu fonksiyon tek not silme modalini acar.
@@ -67,6 +98,11 @@ export function openClearNotesModal() {
 // Bu fonksiyon silme modalini kapatir.
 export function closeDeleteModal() {
   elements.deleteModal.classList.add("hidden");
+}
+
+// Bu fonksiyon silme modalinin acik olup olmadigini soyler.
+export function isDeleteModalOpen() {
+  return elements.deleteModal.classList.contains("hidden") === false;
 }
 
 // Bu fonksiyon notlari arama metnine gore filtreler ve ekranda gosterilecek siraya sokar.

@@ -69,6 +69,31 @@ h2 {
   margin-bottom: 20px;
 }
 
+.status-message {
+  border-radius: 6px;
+  box-shadow: 0 16px 40px rgba(31, 41, 51, 0.18);
+  font-weight: 700;
+  max-width: min(360px, calc(100% - 32px));
+  padding: 12px 14px;
+  position: fixed;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.status-success {
+  background: #e8f4f1;
+  border: 1px solid #b9dcd4;
+  color: #25685d;
+}
+
+.status-danger {
+  background: #fff0ed;
+  border: 1px solid #f0b8ad;
+  color: #9f3428;
+}
+
 .note-form {
   display: grid;
   gap: 12px;
@@ -78,6 +103,14 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.input-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: -4px;
 }
 
 label {
@@ -113,7 +146,14 @@ textarea.input-error:focus {
   color: #b42318;
   font-size: 14px;
   font-weight: 700;
-  margin: -4px 0 0;
+  margin: 0;
+}
+
+#character-count {
+  color: #6b7c86;
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 button {
@@ -324,6 +364,18 @@ input[type="search"]:focus {
 
   .modal-actions button {
     width: 100%;
+  }
+
+  .input-info {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .status-message {
+    max-width: none;
+    width: calc(100% - 20px);
+    top: 10px;
   }
 
   .note-item {

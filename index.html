@@ -21,8 +21,11 @@
 
       <form id="note-form" class="note-form">
         <label for="note-input">Not metni</label>
-        <textarea id="note-input" name="note" rows="4" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
-        <p id="note-error" class="error-message hidden">Not yazmadiniz.</p>
+        <textarea id="note-input" name="note" rows="4" maxlength="500" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
+        <div class="input-info">
+          <p id="note-error" class="error-message hidden">Not yazmadiniz.</p>
+          <span id="character-count">0 / 500</span>
+        </div>
 
         <div class="form-actions">
           <button id="submit-note-button" type="submit">Not Ekle</button>
@@ -30,6 +33,8 @@
         </div>
       </form>
     </section>
+
+    <p id="status-message" class="status-message hidden" aria-live="polite"></p>
 
     <section class="notes-area" aria-labelledby="notes-title">
       <div class="notes-heading">

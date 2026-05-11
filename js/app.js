@@ -5,11 +5,14 @@ import {
   closeDeleteModal,
   elements,
   hideEditMode,
+  isDeleteModalOpen,
   openClearNotesModal,
   openSingleDeleteModal,
   renderNotes,
   showEditMode,
   showNoteError,
+  showStatusMessage,
+  updateCharacterCount,
 } from "./ui.js";
 
 // Bu dosya uygulamanin ana akisini yonetir.
@@ -42,6 +45,10 @@ function cancelEditNote() {
   hideEditMode();
 }
 
+function isEditingNote() {
+  return noteIndexToEdit !== null;
+}
+
 function openDeleteModal(index) {
   noteIndexToDelete = index;
   shouldDeleteAllNotes = false;
@@ -66,6 +73,7 @@ function confirmDelete() {
     cancelEditNote();
     cancelDelete();
     saveAndRender();
+    showStatusMessage("Tum notlar temizlendi.", "danger");
     return;
   }
 
@@ -77,6 +85,7 @@ function confirmDelete() {
   cancelEditNote();
   cancelDelete();
   saveAndRender();
+  showStatusMessage("Not silindi.", "danger");
 }
 
 function handleNoteSubmit(event) {
@@ -96,20 +105,45 @@ function handleNoteSubmit(event) {
     notes[noteIndexToEdit].updatedAt = new Date().toISOString();
     cancelEditNote();
     saveAndRender();
+    showStatusMessage("Not guncellendi.");
     return;
   }
 
   notes.push(createNote(newNoteText));
   elements.noteInput.value = "";
+  updateCharacterCount();
   saveAndRender();
+  showStatusMessage("Not eklendi.");
+}
+
+function handleNoteInput() {
+  clearNoteError();
+  updateCharacterCount();
+}
+
+function handleKeyboardShortcuts(event) {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (isDeleteModalOpen()) {
+    cancelDelete();
+    return;
+  }
+
+  if (isEditingNote()) {
+    cancelEditNote();
+  }
 }
 
 elements.noteForm.addEventListener("submit", handleNoteSubmit);
-elements.noteInput.addEventListener("input", clearNoteError);
+elements.noteInput.addEventListener("input", handleNoteInput);
 elements.searchInput.addEventListener("input", updateScreen);
 elements.clearNotesButton.addEventListener("click", openDeleteAllModal);
 elements.cancelDeleteButton.addEventListener("click", cancelDelete);
 elements.confirmDeleteButton.addEventListener("click", confirmDelete);
 elements.cancelEditButton.addEventListener("click", cancelEditNote);
+document.addEventListener("keydown", handleKeyboardShortcuts);
 
+updateCharacterCount();
 updateScreen();

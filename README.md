@@ -12,6 +12,8 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Not listesi
 - Not sayaci
 - Bos not uyarisi
+- Karakter sayaci
+- Islem sonrasi durum mesaji
 - Not duzenleme
 - Ozel silme onay penceresi
 - Notlari tarayicida kaydetme
@@ -19,6 +21,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Notlarda olusturma ve guncelleme tarihi
 - En yeni notu en ustte gosterme
 - Tum notlari onayla temizleme
+- Escape tusu ile modal veya duzenleme modunu kapatma
 
 ## Nasil Calistirilir
 
@@ -34,6 +37,7 @@ Not: `index.html` dosyasina dogrudan cift tiklamak module dosyalarini her tarayi
 
 - `index.html`: Sayfa iskeleti
 - `style.css`: Tasarim
+- `LEARNING_NOTES.md`: Kodlari ve dosya baglantilarini anlatan ogrenme dokumani
 - `js/app.js`: Uygulamanin ana akisi
 - `js/notes.js`: Not verisi ve tarih islemleri
 - `js/storage.js`: localStorage kayit islemleri
