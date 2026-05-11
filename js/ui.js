@@ -3,6 +3,12 @@ import { formatDate } from "./notes.js";
 // Bu dosya ekrani yonetir.
 // HTML elemanlarini secer, listeyi cizer, hata mesajlarini ve modallari gosterir.
 
+function setButtonInfo(button, label, icon) {
+  button.textContent = icon;
+  button.setAttribute("aria-label", label);
+  button.setAttribute("title", label);
+}
+
 export const elements = {
   noteForm: document.querySelector("#note-form"),
   noteInput: document.querySelector("#note-input"),
@@ -82,7 +88,7 @@ export function showStatusMessage(message, type = "success") {
 // Bu fonksiyon duzenleme modunu ekranda baslatir.
 export function showEditMode(noteText) {
   elements.noteInput.value = noteText;
-  elements.submitNoteButton.textContent = "Notu Guncelle";
+  setButtonInfo(elements.submitNoteButton, "Notu guncelle", "💾");
   elements.cancelEditButton.classList.remove("hidden");
   updateCharacterCount();
   elements.noteInput.focus();
@@ -92,7 +98,7 @@ export function showEditMode(noteText) {
 export function hideEditMode() {
   elements.noteInput.value = "";
   clearNoteError();
-  elements.submitNoteButton.textContent = "Not Ekle";
+  setButtonInfo(elements.submitNoteButton, "Not ekle", "➕");
   elements.cancelEditButton.classList.add("hidden");
   updateCharacterCount();
 }
@@ -101,7 +107,7 @@ export function hideEditMode() {
 export function openSingleDeleteModal() {
   elements.deleteModalTitle.textContent = "Not Silinsin mi?";
   elements.deleteModalText.textContent = "Bu notu silersen geri alamazsin.";
-  elements.confirmDeleteButton.textContent = "Evet, Sil";
+  setButtonInfo(elements.confirmDeleteButton, "Notu sil", "🗑️");
   elements.deleteModal.classList.remove("hidden");
 }
 
@@ -109,7 +115,7 @@ export function openSingleDeleteModal() {
 export function openClearNotesModal() {
   elements.deleteModalTitle.textContent = "Tum Notlar Silinsin mi?";
   elements.deleteModalText.textContent = "Bu islem tum notlarini kalici olarak siler.";
-  elements.confirmDeleteButton.textContent = "Evet, Tumunu Sil";
+  setButtonInfo(elements.confirmDeleteButton, "Tum notlari sil", "🧹");
   elements.deleteModal.classList.remove("hidden");
 }
 
@@ -131,7 +137,11 @@ export function applyTheme(theme) {
   // true ise class eklenir, false ise class kaldirilir.
   document.body.classList.toggle("dark-theme", isDarkTheme);
 
-  elements.themeToggleButton.textContent = isDarkTheme ? "Acik Tema" : "Koyu Tema";
+  setButtonInfo(
+    elements.themeToggleButton,
+    isDarkTheme ? "Acik temaya gec" : "Koyu temaya gec",
+    isDarkTheme ? "☀️" : "🌙"
+  );
   elements.themeToggleButton.setAttribute("aria-pressed", String(isDarkTheme));
 }
 
@@ -254,22 +264,26 @@ export function renderNotes(notes, handlers) {
     noteActions.className = "note-actions";
 
     const pinButton = document.createElement("button");
-    pinButton.textContent = item.note.isPinned ? "Sabiti Kaldir" : "Sabitle";
-    pinButton.className = "pin-button";
+    pinButton.className = "pin-button icon-button";
+    setButtonInfo(
+      pinButton,
+      item.note.isPinned ? "Sabiti kaldir" : "Notu sabitle",
+      item.note.isPinned ? "📍" : "📌"
+    );
     pinButton.addEventListener("click", function () {
       handlers.onTogglePin(item.index);
     });
 
     const editButton = document.createElement("button");
-    editButton.textContent = "Duzenle";
-    editButton.className = "edit-button";
+    editButton.className = "edit-button icon-button";
+    setButtonInfo(editButton, "Notu duzenle", "✏️");
     editButton.addEventListener("click", function () {
       handlers.onEdit(item.index);
     });
 
     const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Sil";
-    deleteButton.className = "delete-button";
+    deleteButton.className = "delete-button icon-button";
+    setButtonInfo(deleteButton, "Notu sil", "🗑️");
     deleteButton.addEventListener("click", function () {
       handlers.onDelete(item.index);
     });

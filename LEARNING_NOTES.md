@@ -8,6 +8,7 @@ Uygulama su isleri yapar:
 
 - Kullanici not yazar.
 - Not listeye eklenir.
+- Butonlarda kisa emoji ikonlari kullanilir.
 - Notlar tarayicida saklanir.
 - Notlar duzenlenebilir.
 - Notlar sabitlenebilir.
@@ -54,6 +55,7 @@ Burada:
 - Arama temizleme butonu
 - Karakter sayaci
 - Tema degistirme butonu
+- Emoji ikonlu butonlar
 - Durum mesaji
 - Durum mesaji animasyonu
 - Notlarin gosterilecegi liste
@@ -73,6 +75,7 @@ Burada:
 - Koyu/acik tema renkleri
 - Bosluklar
 - Buton stilleri
+- Ikon buton boyutlari
 - Not kartlari
 - Hata gorunumu
 - Modal gorunumu
@@ -131,6 +134,7 @@ Burada:
 - Modal acilir/kapanir.
 - Duzenleme modu ekranda gosterilir.
 - Secilen tema ekrana uygulanir.
+- Ikon butonlarin gorunen metni, basligi ve erisilebilir adi guncellenir.
 
 ## Dosyalar Birbirine Nasil Baglaniyor?
 
@@ -1050,6 +1054,49 @@ Butona tiklandiginda bu fonksiyonun calismasi icin event listener ekledik:
 elements.clearSearchButton.addEventListener("click", clearSearch);
 ```
 
+### 25. Butonlari emoji ikonlara cevirme
+
+Butonlarda uzun metin yerine kisa emoji ikonlari kullandik.
+
+Ornek:
+
+```html
+<button aria-label="Not ekle" title="Not ekle">➕</button>
+```
+
+Burada butonun ekranda gorunen kismi `➕` ikonudur.
+
+Ama butonun anlami kaybolmasin diye iki ozellik ekledik:
+
+```text
+aria-label = ekran okuyucular icin butonun adi
+title      = uzerine gelince gorunen kisa aciklama
+```
+
+Dinamik olusan butonlarda ayni isi tekrar tekrar yazmamak icin `ui.js` icinde yardimci fonksiyon olusturduk:
+
+```js
+function setButtonInfo(button, label, icon) {
+  button.textContent = icon;
+  button.setAttribute("aria-label", label);
+  button.setAttribute("title", label);
+}
+```
+
+Bu fonksiyon:
+
+- Butonun gorunen ikonunu ayarlar.
+- Butonun erisilebilir adini ayarlar.
+- Hover aciklamasini ayarlar.
+
+Ornek kullanim:
+
+```js
+setButtonInfo(editButton, "Notu duzenle", "✏️");
+```
+
+Bu satir ekranda kalem ikonu gosterir, ama butonun anlamini `Notu duzenle` olarak saklar.
+
 ## Neden Kodlari Bolduk?
 
 Baslangicta her sey tek dosyada olabilir. Ama proje buyuyunce tek dosya zorlasir.
@@ -1119,6 +1166,24 @@ Kullanici bir sey yaptiginda kod calistirir.
 button.addEventListener("click", function () {
   // tiklaninca calisir
 });
+```
+
+### aria-label
+
+Bir butonun veya elemanin erisilebilir adini belirler.
+
+```html
+<button aria-label="Notu sil">🗑️</button>
+```
+
+Bu ornekte ekranda sadece ikon gorunur, ama butonun anlami korunur.
+
+### title
+
+Bir elemanin uzerine gelince gorunen kisa aciklamadir.
+
+```html
+<button title="Notu sil">🗑️</button>
 ```
 
 ### event.target

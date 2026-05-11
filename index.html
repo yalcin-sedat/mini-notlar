@@ -17,7 +17,7 @@
         <p class="intro">Kisa notlarini yaz, listele ve daha sonra geri don.</p>
       </div>
 
-      <button id="theme-toggle-button" class="theme-button" type="button" aria-pressed="false">Koyu Tema</button>
+      <button id="theme-toggle-button" class="theme-button icon-button" type="button" aria-label="Koyu temaya gec" aria-pressed="false" title="Koyu temaya gec">🌙</button>
     </section>
 
     <section class="note-panel" aria-labelledby="new-note-title">
@@ -32,8 +32,8 @@
         </div>
 
         <div class="form-actions">
-          <button id="submit-note-button" type="submit">Not Ekle</button>
-          <button id="cancel-edit-button" class="secondary-button hidden" type="button">Vazgec</button>
+          <button id="submit-note-button" class="icon-button" type="submit" aria-label="Not ekle" title="Not ekle">➕</button>
+          <button id="cancel-edit-button" class="secondary-button icon-button hidden" type="button" aria-label="Duzenlemeden vazgec" title="Duzenlemeden vazgec">↩️</button>
         </div>
       </form>
     </section>
@@ -45,7 +45,7 @@
         <h2 id="notes-title">Notlarim</h2>
         <div class="notes-tools">
           <span id="note-count">0 not</span>
-          <button id="clear-notes-button" class="danger-button small-button hidden" type="button">Tumunu Temizle</button>
+          <button id="clear-notes-button" class="danger-button small-button icon-button hidden" type="button" aria-label="Tum notlari temizle" title="Tum notlari temizle">🧹</button>
         </div>
       </div>
 
@@ -53,7 +53,7 @@
         <label for="search-input">Notlarda ara</label>
         <div class="search-row">
           <input id="search-input" type="search" placeholder="Aranacak kelime...">
-          <button id="clear-search-button" class="secondary-button small-button hidden" type="button">Temizle</button>
+          <button id="clear-search-button" class="secondary-button small-button icon-button hidden" type="button" aria-label="Aramayi temizle" title="Aramayi temizle">❌</button>
         </div>
       </div>
 
@@ -69,8 +69,8 @@
       <p>Bu notu silersen geri alamazsin.</p>
 
       <div class="modal-actions">
-        <button id="cancel-delete-button" class="secondary-button" type="button">Vazgec</button>
-        <button id="confirm-delete-button" class="danger-button" type="button">Evet, Sil</button>
+        <button id="cancel-delete-button" class="secondary-button icon-button" type="button" aria-label="Vazgec" title="Vazgec">↩️</button>
+        <button id="confirm-delete-button" class="danger-button icon-button" type="button" aria-label="Sil" title="Sil">🗑️</button>
       </div>
     </div>
   </div>

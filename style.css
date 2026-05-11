@@ -230,6 +230,15 @@ button:hover {
   background: var(--primary-hover-color);
 }
 
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
+  line-height: 1;
+}
+
 .theme-button {
   flex: 0 0 auto;
   background: var(--secondary-background);
@@ -369,6 +378,12 @@ input[type="search"]:focus {
   gap: 8px;
 }
 
+.note-actions .icon-button {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px;
+}
+
 .pin-button {
   background: var(--secondary-background);
   color: var(--text-color);
@@ -448,7 +463,7 @@ input[type="search"]:focus {
 }
 
 .small-button {
-  padding: 8px 12px;
+  padding: 8px;
 }
 
 @media (max-width: 640px) {
