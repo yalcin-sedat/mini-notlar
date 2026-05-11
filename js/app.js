@@ -132,6 +132,14 @@ function clearSearch() {
   elements.searchInput.focus();
 }
 
+function handleModalClick(event) {
+  // event.target tiklanan gercek elemandir.
+  // Sadece modal arka planina tiklandiysa pencereyi kapatiyoruz.
+  if (event.target === elements.deleteModal) {
+    cancelDelete();
+  }
+}
+
 function handleKeyboardShortcuts(event) {
   if (event.key !== "Escape") {
     return;
@@ -166,6 +174,7 @@ elements.clearSearchButton.addEventListener("click", clearSearch);
 elements.clearNotesButton.addEventListener("click", openDeleteAllModal);
 elements.cancelDeleteButton.addEventListener("click", cancelDelete);
 elements.confirmDeleteButton.addEventListener("click", confirmDelete);
+elements.deleteModal.addEventListener("click", handleModalClick);
 elements.cancelEditButton.addEventListener("click", cancelEditNote);
 elements.themeToggleButton.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", handleKeyboardShortcuts);

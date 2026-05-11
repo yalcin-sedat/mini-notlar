@@ -24,6 +24,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - En yeni notu en ustte gosterme
 - Tum notlari onayla temizleme
 - Escape tusu ile modal veya duzenleme modunu kapatma
+- Modal disina tiklayinca modal kapatma
 - Koyu/acik tema secimi
 - Tema tercihini tarayicida kaydetme
 

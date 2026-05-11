@@ -18,6 +18,7 @@ Uygulama su isleri yapar:
 - Islem sonrasi kullaniciya kisa durum mesaji gosterilir.
 - Durum mesaji animasyonla acilip kapanir.
 - Escape tusu ile modal veya duzenleme modu kapatilabilir.
+- Modal disina tiklayinca modal kapatilabilir.
 - Kullanici koyu veya acik tema secebilir.
 - Tema tercihi tarayicida saklanir.
 
@@ -224,6 +225,16 @@ Sil butonuna tiklanir
           -> not diziden silinir
           -> saveNotes()
           -> updateScreen()
+```
+
+Kullanici modal disina tiklayinca:
+
+```text
+Modal arka planina tiklanir
+  -> handleModalClick()
+    -> tiklanan eleman modal arka plani mi kontrol edilir
+      -> evetse cancelDelete()
+        -> modal kapanir
 ```
 
 Kullanici tema degistirince:
@@ -683,6 +694,38 @@ Bu kod:
 - Silme penceresi aciksa pencereyi kapatir.
 - Duzenleme modundaysa duzenlemeyi iptal eder.
 
+Modal disina tiklayinca kapatmak icin modal elemanina `click` olayi ekledik:
+
+```js
+elements.deleteModal.addEventListener("click", handleModalClick);
+```
+
+Sonra tiklanan yerin gercekten modal arka plani olup olmadigini kontrol ettik:
+
+```js
+function handleModalClick(event) {
+  if (event.target === elements.deleteModal) {
+    cancelDelete();
+  }
+}
+```
+
+Burada yeni kavram `event.target`.
+
+`event.target`, tiklamanin basladigi gercek HTML elemanini gosterir.
+
+Bu projede su anlama gelir:
+
+```text
+Kullanici koyu modal arka planina tiklarsa:
+event.target === elements.deleteModal olur.
+
+Kullanici modal kutusunun icindeki yaziya veya butona tiklarsa:
+event.target baska bir eleman olur.
+```
+
+Bu sayede modal kutusunun icine tiklayinca modal kapanmaz, sadece dis alana tiklayinca kapanir.
+
 ### 19. CSS degiskenleri
 
 Tema eklemek icin renkleri tek tek her yerde degistirmek yerine CSS degiskenleri kullandik.
@@ -981,6 +1024,18 @@ button.addEventListener("click", function () {
   // tiklaninca calisir
 });
 ```
+
+### event.target
+
+Bir olayda kullanicinin gercekten hangi elemana tikladigini soyler.
+
+```js
+function handleClick(event) {
+  console.log(event.target);
+}
+```
+
+Modal disina tiklama ozelliginde, tiklanan yer modal arka plani mi diye bunu kullandik.
 
 ### Module
 
