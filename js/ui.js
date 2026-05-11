@@ -22,6 +22,7 @@ export const elements = {
   searchInput: document.querySelector("#search-input"),
   clearSearchButton: document.querySelector("#clear-search-button"),
   noteCount: document.querySelector("#note-count"),
+  noteStats: document.querySelector("#note-stats"),
   clearNotesButton: document.querySelector("#clear-notes-button"),
   deleteModal: document.querySelector("#delete-modal"),
   deleteModalTitle: document.querySelector("#delete-modal-title"),
@@ -233,17 +234,40 @@ function getVisibleNotes(notes) {
   };
 }
 
+// Bu fonksiyon tum notlardaki toplam karakter ve kelime sayisini hesaplar.
+function getNoteStats(notes) {
+  const characterCount = notes.reduce(function (total, note) {
+    return total + note.text.length;
+  }, 0);
+
+  const wordCount = notes.reduce(function (total, note) {
+    const words = note.text.trim().split(/\s+/).filter(function (word) {
+      return word !== "";
+    });
+
+    return total + words.length;
+  }, 0);
+
+  return {
+    characterCount: characterCount,
+    wordCount: wordCount,
+  };
+}
+
 // Bu fonksiyon not listesini ekranda yeniden olusturur.
 export function renderNotes(notes, handlers) {
   elements.notesList.innerHTML = "";
 
   const result = getVisibleNotes(notes);
+  const stats = getNoteStats(notes);
 
   if (result.searchText === "") {
     elements.noteCount.textContent = `${notes.length} not`;
   } else {
     elements.noteCount.textContent = `${result.visibleNotes.length} sonuc`;
   }
+
+  elements.noteStats.textContent = `${stats.characterCount} karakter · ${stats.wordCount} kelime`;
 
   if (notes.length === 0) {
     elements.clearNotesButton.classList.add("hidden");

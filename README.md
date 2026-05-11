@@ -13,6 +13,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 - Ikonlu butonlar
 - Daha aciklayici bos liste ekrani
 - Not sayaci
+- Toplam karakter ve kelime sayaci
 - Bos not uyarisi
 - Karakter sayaci
 - Islem sonrasi durum mesaji

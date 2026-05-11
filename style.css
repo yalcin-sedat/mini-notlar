@@ -322,6 +322,12 @@ button:hover {
   font-weight: 700;
 }
 
+#note-stats {
+  color: var(--soft-text-color);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .notes-list {
   display: grid;
   gap: 12px;

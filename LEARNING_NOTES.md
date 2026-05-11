@@ -14,6 +14,7 @@ Uygulama su isleri yapar:
 - Notlar sabitlenebilir.
 - Sabitlenen notlar en ustte gosterilir.
 - Notlara renk etiketi verilebilir.
+- Toplam karakter ve kelime sayisi gosterilir.
 - Notlar tek tek veya topluca silinebilir.
 - Notlar icinde arama yapilabilir.
 - Arama kutusu tek tiklamayla temizlenebilir.
@@ -130,6 +131,7 @@ Burada:
 
 - HTML elemanlari secilir.
 - Not listesi ekrana cizilir.
+- Toplam karakter ve kelime sayisi hesaplanir.
 - Bos liste ve bos arama sonucu ekrani olusturulur.
 - Hata mesaji gosterilir/gizlenir.
 - Arama temizleme butonu gosterilir/gizlenir.
@@ -548,6 +550,16 @@ elements.notesList.appendChild(
 );
 ```
 
+Not listesi cizilirken toplam karakter ve kelime sayisi da hesaplanir:
+
+```js
+const stats = getNoteStats(notes);
+
+elements.noteStats.textContent = `${stats.characterCount} karakter · ${stats.wordCount} kelime`;
+```
+
+Bu bilgi arama sonucuna gore degil, tum notlara gore hesaplanir.
+
 ### 14. Arama mantigi
 
 ```js
@@ -566,7 +578,44 @@ Sonra notlar filtrelenir:
 
 Bu kod, sadece arama metnini iceren notlari gosterir.
 
-### 15. Sabitlenen notlari en ustte gosterme
+### 15. Toplam karakter ve kelime sayisi
+
+Tum notlardaki karakter ve kelime sayisini hesaplamak icin `reduce()` kullandik.
+
+```js
+function getNoteStats(notes) {
+  const characterCount = notes.reduce(function (total, note) {
+    return total + note.text.length;
+  }, 0);
+
+  const wordCount = notes.reduce(function (total, note) {
+    const words = note.text.trim().split(/\s+/).filter(function (word) {
+      return word !== "";
+    });
+
+    return total + words.length;
+  }, 0);
+
+  return {
+    characterCount: characterCount,
+    wordCount: wordCount,
+  };
+}
+```
+
+Karakter sayisi icin her notun `text.length` degerini topluyoruz.
+
+Kelime sayisi icin:
+
+```js
+note.text.trim().split(/\s+/)
+```
+
+Bu satir not metnini bosluklara gore parcalara ayirir.
+
+`filter()` ile bos parcalari temizleriz.
+
+### 16. Sabitlenen notlari en ustte gosterme
 
 ```js
 .sort(function (firstItem, secondItem) {
@@ -615,7 +664,7 @@ Kayitli notta isPinned true ise true kullan.
 Diger her durumda false kullan.
 ```
 
-### 16. Notlara renk etiketi verme
+### 17. Notlara renk etiketi verme
 
 HTML tarafinda renk secmek icin `radio` inputlari ekledik:
 
@@ -677,7 +726,7 @@ Bu fonksiyon sadece izin verdigimiz renkleri kabul eder.
 
 Kayitli renk yoksa veya hataliysa varsayilan olarak `green` kullanilir.
 
-### 17. Karakter sayaci
+### 18. Karakter sayaci
 
 HTML tarafinda not yazma alanina `maxlength` ekledik:
 
@@ -712,7 +761,7 @@ elements.noteInput.addEventListener("input", handleNoteInput);
 
 Yani her karakter yazildiginda hem hata mesaji temizlenir hem de sayac guncellenir.
 
-### 18. Durum mesaji
+### 19. Durum mesaji
 
 Kullanicinin yaptigi islemden sonra ekranda kisa bilgi gosteriyoruz.
 
@@ -832,7 +881,7 @@ Sonra status-visible class'i eklensin.
 Boylece tarayici iki durumu ayri ayri gorur ve animasyon calisir.
 ```
 
-### 19. Klavye kisayolu
+### 20. Klavye kisayolu
 
 Kullanicinin `Escape` tusuna bastigini anlamak icin `keydown` olayini dinliyoruz:
 
@@ -903,7 +952,7 @@ event.target baska bir eleman olur.
 
 Bu sayede modal kutusunun icine tiklayinca modal kapanmaz, sadece dis alana tiklayinca kapanir.
 
-### 20. CSS degiskenleri
+### 21. CSS degiskenleri
 
 Tema eklemek icin renkleri tek tek her yerde degistirmek yerine CSS degiskenleri kullandik.
 
@@ -944,7 +993,7 @@ body.dark-theme {
 
 Boylece `body` elemaninda `dark-theme` class'i varsa renkler otomatik degisir.
 
-### 21. Tema butonu
+### 22. Tema butonu
 
 HTML tarafina tema degistirmek icin bir buton ekledik:
 
@@ -964,7 +1013,7 @@ Boylece `app.js` icinde butona tiklanma olayini dinleyebiliriz:
 elements.themeToggleButton.addEventListener("click", toggleTheme);
 ```
 
-### 22. classList.toggle
+### 23. classList.toggle
 
 Tema class'ini eklemek veya kaldirmak icin `classList.toggle` kullandik.
 
@@ -981,7 +1030,7 @@ isDarkTheme false ise dark-theme class'i kaldirilir.
 
 Yani manuel olarak iki ayri `if` yazmadan temayi ekrana uygulamis oluruz.
 
-### 23. Tema bilgisini kaydetme
+### 24. Tema bilgisini kaydetme
 
 Notlari kaydettigimiz gibi tema tercihini de `localStorage` icinde sakladik.
 
@@ -1013,7 +1062,7 @@ Eger kayitli tema `dark` ise koyu tema gelir.
 
 Kayit yoksa uygulama acik tema ile baslar.
 
-### 24. Tema akisini app.js yonetir
+### 25. Tema akisini app.js yonetir
 
 `app.js` icinde sayfa ilk acildiginda tema yuklenir:
 
@@ -1051,7 +1100,7 @@ Bu fonksiyon:
 - Yeni temayi tarayicida saklar.
 - Kullaniciya durum mesaji gosterir.
 
-### 25. Arama kutusunu temizleme
+### 26. Arama kutusunu temizleme
 
 Arama kutusunun yanina bir Temizle butonu ekledik:
 
@@ -1131,7 +1180,7 @@ Butona tiklandiginda bu fonksiyonun calismasi icin event listener ekledik:
 elements.clearSearchButton.addEventListener("click", clearSearch);
 ```
 
-### 26. Butonlari ikonlara cevirme
+### 27. Butonlari ikonlara cevirme
 
 Butonlarda uzun metin yerine kisa ikonlar kullandik.
 
