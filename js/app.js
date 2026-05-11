@@ -32,6 +32,7 @@ function updateScreen() {
   renderNotes(notes, {
     onEdit: startEditNote,
     onDelete: openDeleteModal,
+    onTogglePin: togglePinNote,
   });
 }
 
@@ -52,6 +53,17 @@ function cancelEditNote() {
 
 function isEditingNote() {
   return noteIndexToEdit !== null;
+}
+
+function togglePinNote(index) {
+  notes[index].isPinned = !notes[index].isPinned;
+  saveAndRender();
+
+  if (notes[index].isPinned) {
+    showStatusMessage("Not sabitlendi.");
+  } else {
+    showStatusMessage("Not sabiti kaldirildi.");
+  }
 }
 
 function openDeleteModal(index) {

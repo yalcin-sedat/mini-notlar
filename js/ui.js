@@ -182,9 +182,15 @@ function getVisibleNotes(notes) {
     .filter(function (item) {
       return item.note.text.toLowerCase().includes(searchText);
     })
-    // Yeni eklenen notlar dizinin sonunda durur.
-    // Ekranda en yeni not en ustte gorunsun diye sadece gosterim sirasini ters ceviriyoruz.
-    .reverse();
+    // Sabitlenen notlar ustte gorunur.
+    // Ayni gruptaki notlarda en yeni not ustte kalir.
+    .sort(function (firstItem, secondItem) {
+      if (firstItem.note.isPinned !== secondItem.note.isPinned) {
+        return secondItem.note.isPinned - firstItem.note.isPinned;
+      }
+
+      return secondItem.index - firstItem.index;
+    });
 
   return {
     searchText: searchText,
@@ -239,8 +245,20 @@ export function renderNotes(notes, handlers) {
       noteMeta.textContent = `Guncellendi: ${formatDate(item.note.updatedAt)}`;
     }
 
+    if (item.note.isPinned) {
+      noteItem.classList.add("note-item-pinned");
+      noteMeta.textContent = `Sabitlendi - ${noteMeta.textContent}`;
+    }
+
     const noteActions = document.createElement("div");
     noteActions.className = "note-actions";
+
+    const pinButton = document.createElement("button");
+    pinButton.textContent = item.note.isPinned ? "Sabiti Kaldir" : "Sabitle";
+    pinButton.className = "pin-button";
+    pinButton.addEventListener("click", function () {
+      handlers.onTogglePin(item.index);
+    });
 
     const editButton = document.createElement("button");
     editButton.textContent = "Duzenle";
@@ -258,6 +276,7 @@ export function renderNotes(notes, handlers) {
 
     noteContent.appendChild(noteText);
     noteContent.appendChild(noteMeta);
+    noteActions.appendChild(pinButton);
     noteActions.appendChild(editButton);
     noteActions.appendChild(deleteButton);
     noteItem.appendChild(noteContent);

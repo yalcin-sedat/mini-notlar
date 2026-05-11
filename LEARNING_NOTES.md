@@ -10,6 +10,8 @@ Uygulama su isleri yapar:
 - Not listeye eklenir.
 - Notlar tarayicida saklanir.
 - Notlar duzenlenebilir.
+- Notlar sabitlenebilir.
+- Sabitlenen notlar en ustte gosterilir.
 - Notlar tek tek veya topluca silinebilir.
 - Notlar icinde arama yapilabilir.
 - Arama kutusu tek tiklamayla temizlenebilir.
@@ -87,6 +89,7 @@ Burada:
 - Notlar hafizada tutulur.
 - Kullanici olaylari dinlenir.
 - Not ekleme, silme, duzenleme ve tumunu temizleme akisi yonetilir.
+- Not sabitleme akisi yonetilir.
 - Diger dosyalardan gelen fonksiyonlar birlestirilir.
 
 ### `js/notes.js`
@@ -97,6 +100,7 @@ Burada:
 
 - Yeni not nesnesi olusturulur.
 - Eski not verisi yeni yapıya uyarlanir.
+- Notun sabitli olup olmadigi tutulur.
 - Tarihler okunabilir hale getirilir.
 
 ### `js/storage.js`
@@ -314,9 +318,17 @@ Ornek:
 ```js
 {
   text: "Alisveris yap",
+  isPinned: false,
   createdAt: "2026-05-11T10:00:00.000Z",
   updatedAt: "2026-05-11T10:00:00.000Z"
 }
+```
+
+`isPinned` notun sabitlenip sabitlenmedigini tutar.
+
+```text
+false = sabit degil
+true = sabit
 ```
 
 ### 5. Notlari kaydetme
@@ -343,6 +355,7 @@ Icinde su fonksiyon calisir:
 renderNotes(notes, {
   onEdit: startEditNote,
   onDelete: openDeleteModal,
+  onTogglePin: togglePinNote,
 });
 ```
 
@@ -352,6 +365,7 @@ Yani `ui.js` dosyasina deriz ki:
 Bu notlari ekranda goster.
 Duzenle tiklanirsa startEditNote calissin.
 Sil tiklanirsa openDeleteModal calissin.
+Sabitle tiklanirsa togglePinNote calissin.
 ```
 
 ### 7. Event listener mantigi
@@ -533,17 +547,54 @@ Sonra notlar filtrelenir:
 
 Bu kod, sadece arama metnini iceren notlari gosterir.
 
-### 15. En yeni notu en ustte gosterme
+### 15. Sabitlenen notlari en ustte gosterme
 
 ```js
-.reverse();
+.sort(function (firstItem, secondItem) {
+  if (firstItem.note.isPinned !== secondItem.note.isPinned) {
+    return secondItem.note.isPinned - firstItem.note.isPinned;
+  }
+
+  return secondItem.index - firstItem.index;
+});
 ```
 
-Notlar normalde diziye sona eklenir.
+Bu kod notlari ekranda gosterirken siralar.
 
-`reverse()` sadece ekranda gosterim sirasini ters cevirir.
+Once sabitlenen notlar ustte gorunur.
 
-Boylece en yeni not en ustte gorunur.
+Ayni gruptaki notlarda ise en yeni not ustte kalir.
+
+Notun sabitlenme durumunu degistiren fonksiyon:
+
+```js
+function togglePinNote(index) {
+  notes[index].isPinned = !notes[index].isPinned;
+  saveAndRender();
+}
+```
+
+Buradaki `!` isareti boolean degeri tersine cevirir.
+
+```text
+true ise false yapar.
+false ise true yapar.
+```
+
+Eski notlarda `isPinned` alani olmayabilir.
+
+Bu yuzden `normalizeNote()` icinde varsayilan deger ekledik:
+
+```js
+isPinned: note.isPinned === true,
+```
+
+Bu satir sunu yapar:
+
+```text
+Kayitli notta isPinned true ise true kullan.
+Diger her durumda false kullan.
+```
 
 ### 16. Karakter sayaci
 

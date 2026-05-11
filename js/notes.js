@@ -7,6 +7,7 @@ export function createNote(text) {
 
   return {
     text: text,
+    isPinned: false,
     createdAt: now,
     updatedAt: now,
   };
@@ -19,6 +20,7 @@ export function normalizeNote(note) {
   if (typeof note === "string") {
     return {
       text: note,
+      isPinned: false,
       createdAt: now,
       updatedAt: now,
     };
@@ -30,6 +32,7 @@ export function normalizeNote(note) {
 
   return {
     text: note.text,
+    isPinned: note.isPinned === true,
     createdAt: note.createdAt || now,
     updatedAt: note.updatedAt || note.createdAt || now,
   };

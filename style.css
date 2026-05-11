@@ -342,6 +342,11 @@ input[type="search"]:focus {
   white-space: pre-wrap;
 }
 
+.note-item-pinned {
+  border-color: var(--primary-color);
+  box-shadow: inset 4px 0 0 var(--primary-color);
+}
+
 .note-content {
   flex: 1;
 }
@@ -360,7 +365,18 @@ input[type="search"]:focus {
 .note-actions {
   display: flex;
   flex: 0 0 auto;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.pin-button {
+  background: var(--secondary-background);
+  color: var(--text-color);
+  padding: 8px 12px;
+}
+
+.pin-button:hover {
+  background: var(--secondary-hover-background);
 }
 
 .edit-button {
