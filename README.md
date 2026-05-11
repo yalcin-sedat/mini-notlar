@@ -10,7 +10,7 @@ Bu proje, sifirdan uygulama gelistirmeyi ogrenmek icin hazirlaniyor. Amac sadece
 
 - Not yazma alani
 - Not listesi
-- Emoji ikonlu butonlar
+- Ikonlu butonlar
 - Daha aciklayici bos liste ekrani
 - Not sayaci
 - Bos not uyarisi

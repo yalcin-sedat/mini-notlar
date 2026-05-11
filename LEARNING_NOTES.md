@@ -8,7 +8,7 @@ Uygulama su isleri yapar:
 
 - Kullanici not yazar.
 - Not listeye eklenir.
-- Butonlarda kisa emoji ikonlari kullanilir.
+- Butonlarda kisa ikonlar kullanilir.
 - Notlar tarayicida saklanir.
 - Notlar duzenlenebilir.
 - Notlar sabitlenebilir.
@@ -55,7 +55,7 @@ Burada:
 - Arama temizleme butonu
 - Karakter sayaci
 - Tema degistirme butonu
-- Emoji ikonlu butonlar
+- Ikonlu butonlar
 - Durum mesaji
 - Durum mesaji animasyonu
 - Notlarin gosterilecegi liste
@@ -1054,17 +1054,17 @@ Butona tiklandiginda bu fonksiyonun calismasi icin event listener ekledik:
 elements.clearSearchButton.addEventListener("click", clearSearch);
 ```
 
-### 25. Butonlari emoji ikonlara cevirme
+### 25. Butonlari ikonlara cevirme
 
-Butonlarda uzun metin yerine kisa emoji ikonlari kullandik.
+Butonlarda uzun metin yerine kisa ikonlar kullandik.
 
 Ornek:
 
 ```html
-<button aria-label="Not ekle" title="Not ekle">➕</button>
+<button aria-label="Not ekle" title="Not ekle">+</button>
 ```
 
-Burada butonun ekranda gorunen kismi `➕` ikonudur.
+Burada butonun ekranda gorunen kismi `+` ikonudur.
 
 Ama butonun anlami kaybolmasin diye iki ozellik ekledik:
 
@@ -1092,7 +1092,7 @@ Bu fonksiyon:
 Ornek kullanim:
 
 ```js
-setButtonInfo(editButton, "Notu duzenle", "✏️");
+setButtonInfo(editButton, "Notu duzenle", "✎");
 ```
 
 Bu satir ekranda kalem ikonu gosterir, ama butonun anlamini `Notu duzenle` olarak saklar.
@@ -1173,7 +1173,7 @@ button.addEventListener("click", function () {
 Bir butonun veya elemanin erisilebilir adini belirler.
 
 ```html
-<button aria-label="Notu sil">🗑️</button>
+<button aria-label="Notu sil">×</button>
 ```
 
 Bu ornekte ekranda sadece ikon gorunur, ama butonun anlami korunur.
@@ -1183,7 +1183,7 @@ Bu ornekte ekranda sadece ikon gorunur, ama butonun anlami korunur.
 Bir elemanin uzerine gelince gorunen kisa aciklamadir.
 
 ```html
-<button title="Notu sil">🗑️</button>
+<button title="Notu sil">×</button>
 ```
 
 ### event.target

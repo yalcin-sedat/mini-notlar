@@ -88,7 +88,7 @@ export function showStatusMessage(message, type = "success") {
 // Bu fonksiyon duzenleme modunu ekranda baslatir.
 export function showEditMode(noteText) {
   elements.noteInput.value = noteText;
-  setButtonInfo(elements.submitNoteButton, "Notu guncelle", "💾");
+  setButtonInfo(elements.submitNoteButton, "Notu guncelle", "✓");
   elements.cancelEditButton.classList.remove("hidden");
   updateCharacterCount();
   elements.noteInput.focus();
@@ -98,7 +98,7 @@ export function showEditMode(noteText) {
 export function hideEditMode() {
   elements.noteInput.value = "";
   clearNoteError();
-  setButtonInfo(elements.submitNoteButton, "Not ekle", "➕");
+  setButtonInfo(elements.submitNoteButton, "Not ekle", "+");
   elements.cancelEditButton.classList.add("hidden");
   updateCharacterCount();
 }
@@ -107,7 +107,7 @@ export function hideEditMode() {
 export function openSingleDeleteModal() {
   elements.deleteModalTitle.textContent = "Not Silinsin mi?";
   elements.deleteModalText.textContent = "Bu notu silersen geri alamazsin.";
-  setButtonInfo(elements.confirmDeleteButton, "Notu sil", "🗑️");
+  setButtonInfo(elements.confirmDeleteButton, "Notu sil", "×");
   elements.deleteModal.classList.remove("hidden");
 }
 
@@ -276,14 +276,14 @@ export function renderNotes(notes, handlers) {
 
     const editButton = document.createElement("button");
     editButton.className = "edit-button icon-button";
-    setButtonInfo(editButton, "Notu duzenle", "✏️");
+    setButtonInfo(editButton, "Notu duzenle", "✎");
     editButton.addEventListener("click", function () {
       handlers.onEdit(item.index);
     });
 
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button icon-button";
-    setButtonInfo(deleteButton, "Notu sil", "🗑️");
+    setButtonInfo(deleteButton, "Notu sil", "×");
     deleteButton.addEventListener("click", function () {
       handlers.onDelete(item.index);
     });

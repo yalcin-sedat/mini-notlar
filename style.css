@@ -236,6 +236,7 @@ button:hover {
   min-width: 44px;
   min-height: 44px;
   padding: 10px;
+  font-size: 20px;
   line-height: 1;
 }
 
@@ -382,6 +383,7 @@ input[type="search"]:focus {
   min-width: 40px;
   min-height: 40px;
   padding: 8px;
+  font-size: 22px;
 }
 
 .pin-button {
@@ -406,6 +408,7 @@ input[type="search"]:focus {
 .delete-button {
   background: var(--danger-color);
   padding: 8px 12px;
+  font-size: 24px;
 }
 
 .delete-button:hover {
