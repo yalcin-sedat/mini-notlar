@@ -23,6 +23,7 @@
   --toast-shadow: rgba(31, 41, 51, 0.18);
   --modal-backdrop: rgba(17, 24, 39, 0.55);
   --modal-shadow: rgba(17, 24, 39, 0.25);
+  --card-hover-shadow: rgba(31, 41, 51, 0.1);
 }
 
 body.dark-theme {
@@ -46,6 +47,7 @@ body.dark-theme {
   --toast-shadow: rgba(0, 0, 0, 0.35);
   --modal-backdrop: rgba(3, 7, 18, 0.72);
   --modal-shadow: rgba(0, 0, 0, 0.45);
+  --card-hover-shadow: rgba(0, 0, 0, 0.28);
 }
 
 body {
@@ -53,7 +55,7 @@ body {
   min-height: 100vh;
   background: var(--page-background);
   color: var(--text-color);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 button,
@@ -82,6 +84,7 @@ textarea {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 h1,
@@ -179,27 +182,56 @@ h2 {
 }
 
 .color-option {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-accent);
   cursor: pointer;
-  padding: 8px 10px;
+  position: relative;
+  border: 3px solid transparent;
+  transition: transform 120ms ease;
 }
 
+/* Radyo buton görünmez ama ekran okuyucu onu hala bulur */
 .color-option input {
-  accent-color: var(--color-accent);
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Metin ekran okuyucu için kalıyor ama görsel olarak gizleniyor */
+.color-option span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .color-option span::before {
-  content: "";
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  margin-right: 6px;
+  display: none;
+}
+
+/* Seçili renk: dışına halka */
+.color-option:has(input:checked) {
+  outline: 3px solid var(--text-color);
+  outline-offset: 3px;
+}
+
+/* Klavyeyle odaklanınca da halka göster */
+.color-option:focus-within {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+.color-option:hover {
+  transform: scale(1.15);
 }
 
 .color-option-green {
@@ -235,6 +267,7 @@ textarea {
   background: var(--panel-background);
   padding: 12px;
   color: var(--text-color);
+  transition: border-color 150ms ease;
 }
 
 textarea:focus {
@@ -275,6 +308,7 @@ button {
   cursor: pointer;
   font-weight: 700;
   padding: 12px 18px;
+  transition: background 150ms ease;
 }
 
 button:hover {
@@ -289,6 +323,36 @@ button:hover {
   padding: 10px;
   font-size: 20px;
   line-height: 1;
+  /* Tooltip için konum referansı */
+  position: relative;
+}
+
+/* Hover destekli cihazlarda (masaüstü) title attribute'undan tooltip üret */
+@media (hover: hover) {
+  .icon-button::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--text-color);
+    color: var(--panel-background);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 150ms ease, transform 150ms ease;
+    z-index: 100;
+  }
+
+  .icon-button:hover::after,
+  .icon-button:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .theme-button {
@@ -354,6 +418,7 @@ input[type="search"] {
   background: var(--panel-background);
   padding: 12px;
   color: var(--text-color);
+  transition: border-color 150ms ease;
 }
 
 input[type="search"]:focus {
@@ -407,18 +472,40 @@ input[type="search"]:focus {
   line-height: 1.5;
   padding: 14px;
   white-space: pre-wrap;
+  /* İki gölge katmanı: soldaki renk çubuğu + hover için dış gölge */
+  box-shadow: inset 4px 0 0 var(--note-accent), 0 0 0 transparent;
+  transition: box-shadow 150ms ease;
 }
 
+/* Her renk sınıfı artık box-shadow yerine CSS değişkeni ayarlıyor */
 .note-color-green {
-  box-shadow: inset 4px 0 0 #2f7d6f;
+  --note-accent: #2f7d6f;
 }
 
 .note-color-blue {
-  box-shadow: inset 4px 0 0 #3b6ea8;
+  --note-accent: #3b6ea8;
 }
 
 .note-color-red {
-  box-shadow: inset 4px 0 0 #c24132;
+  --note-accent: #c24132;
+}
+
+/* Hover desteği olan cihazlarda (masaüstü): karta gölge gel, butonlar görünsün */
+@media (hover: hover) {
+  .note-item:hover {
+    box-shadow: inset 4px 0 0 var(--note-accent), 0 4px 20px var(--card-hover-shadow);
+  }
+
+  .note-actions {
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  /* Fareyle üstüne gelince veya klavyeyle odaklanınca butonlar görünsün */
+  .note-item:hover .note-actions,
+  .note-item:focus-within .note-actions {
+    opacity: 1;
+  }
 }
 
 .note-item-pinned {
@@ -461,6 +548,16 @@ input[type="search"]:focus {
 }
 
 .pin-button:hover {
+  background: var(--secondary-hover-background);
+}
+
+.copy-button {
+  background: var(--secondary-background);
+  color: var(--text-color);
+  padding: 8px 12px;
+}
+
+.copy-button:hover {
   background: var(--secondary-hover-background);
 }
 

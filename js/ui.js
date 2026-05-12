@@ -330,6 +330,23 @@ export function renderNotes(notes, handlers) {
       handlers.onEdit(item.index);
     });
 
+    const copyButton = document.createElement("button");
+    copyButton.className = "copy-button icon-button";
+    setButtonInfo(copyButton, "Notu kopyala", "📋");
+    copyButton.addEventListener("click", function () {
+      // navigator.clipboard.writeText bir Promise döndürür:
+      // .then() kopyalama başarılıysa, .catch() izin yoksa veya hata varsa çalışır.
+      navigator.clipboard.writeText(item.note.text).then(function () {
+        setButtonInfo(copyButton, "Kopyalandi", "✓");
+        showStatusMessage("Not kopyalandi.");
+        setTimeout(function () {
+          setButtonInfo(copyButton, "Notu kopyala", "📋");
+        }, 1500);
+      }).catch(function () {
+        showStatusMessage("Kopyalanamadi.", "danger");
+      });
+    });
+
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button icon-button";
     setButtonInfo(deleteButton, "Notu sil", "×");
@@ -341,6 +358,7 @@ export function renderNotes(notes, handlers) {
     noteContent.appendChild(noteMeta);
     noteActions.appendChild(pinButton);
     noteActions.appendChild(editButton);
+    noteActions.appendChild(copyButton);
     noteActions.appendChild(deleteButton);
     noteItem.appendChild(noteContent);
     noteItem.appendChild(noteActions);
