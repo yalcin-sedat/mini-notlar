@@ -113,7 +113,7 @@ export function showStatusMessage(message, type = "success") {
 // Bu fonksiyon duzenleme modunu ekranda baslatir.
 export function showEditMode(noteText) {
   elements.noteInput.value = noteText;
-  setButtonInfo(elements.submitNoteButton, "Notu guncelle", "✓");
+  setButtonInfo(elements.submitNoteButton, "İhtiyacı güncelle", "✓");
   elements.cancelEditButton.classList.remove("hidden");
   updateCharacterCount();
   elements.noteInput.focus();
@@ -124,24 +124,24 @@ export function hideEditMode() {
   elements.noteInput.value = "";
   clearNoteError();
   selectColor("green");
-  setButtonInfo(elements.submitNoteButton, "Not ekle", "+");
+  setButtonInfo(elements.submitNoteButton, "İhtiyaç ekle", "+");
   elements.cancelEditButton.classList.add("hidden");
   updateCharacterCount();
 }
 
 // Bu fonksiyon tek not silme modalini acar.
 export function openSingleDeleteModal() {
-  elements.deleteModalTitle.textContent = "Not Silinsin mi?";
-  elements.deleteModalText.textContent = "Bu notu silersen geri alamazsin.";
-  setButtonInfo(elements.confirmDeleteButton, "Notu sil", "×");
+  elements.deleteModalTitle.textContent = "İhtiyaç Silinsin mi?";
+  elements.deleteModalText.textContent = "Bu ihtiyacı silersen geri alamazsın.";
+  setButtonInfo(elements.confirmDeleteButton, "İhtiyacı sil", "×");
   elements.deleteModal.classList.remove("hidden");
 }
 
 // Bu fonksiyon tum notlari silme modalini acar.
 export function openClearNotesModal() {
-  elements.deleteModalTitle.textContent = "Tum Notlar Silinsin mi?";
-  elements.deleteModalText.textContent = "Bu islem tum notlarini kalici olarak siler.";
-  setButtonInfo(elements.confirmDeleteButton, "Tum notlari sil", "🧹");
+  elements.deleteModalTitle.textContent = "Tüm İhtiyaçlar Silinsin mi?";
+  elements.deleteModalText.textContent = "Bu işlem tüm ihtiyaçları kalıcı olarak siler.";
+  setButtonInfo(elements.confirmDeleteButton, "Tümünü sil", "🧹");
   elements.deleteModal.classList.remove("hidden");
 }
 
@@ -262,7 +262,7 @@ export function renderNotes(notes, handlers) {
   const stats = getNoteStats(notes);
 
   if (result.searchText === "") {
-    elements.noteCount.textContent = `${notes.length} not`;
+    elements.noteCount.textContent = `${notes.length} ihtiyaç`;
   } else {
     elements.noteCount.textContent = `${result.visibleNotes.length} sonuc`;
   }
@@ -272,7 +272,7 @@ export function renderNotes(notes, handlers) {
   if (notes.length === 0) {
     elements.clearNotesButton.classList.add("hidden");
     elements.notesList.appendChild(
-      createEmptyState("Henuz not yok", "Ilk notunu yazip Not Ekle butonuna basabilirsin.")
+      createEmptyState("Henüz ihtiyaç yok", "İlk ihtiyacını yazıp İhtiyaç Ekle butonuna basabilirsin.")
     );
     return;
   }
@@ -316,7 +316,7 @@ export function renderNotes(notes, handlers) {
     pinButton.className = "pin-button icon-button";
     setButtonInfo(
       pinButton,
-      item.note.isPinned ? "Sabiti kaldir" : "Notu sabitle",
+      item.note.isPinned ? "Sabiti kaldır" : "İhtiyacı sabitle",
       item.note.isPinned ? "📍" : "📌"
     );
     pinButton.addEventListener("click", function () {
@@ -325,22 +325,22 @@ export function renderNotes(notes, handlers) {
 
     const editButton = document.createElement("button");
     editButton.className = "edit-button icon-button";
-    setButtonInfo(editButton, "Notu duzenle", "✎");
+    setButtonInfo(editButton, "İhtiyacı düzenle", "✎");
     editButton.addEventListener("click", function () {
       handlers.onEdit(item.index);
     });
 
     const copyButton = document.createElement("button");
     copyButton.className = "copy-button icon-button";
-    setButtonInfo(copyButton, "Notu kopyala", "📋");
+    setButtonInfo(copyButton, "İhtiyacı kopyala", "📋");
     copyButton.addEventListener("click", function () {
       // navigator.clipboard.writeText bir Promise döndürür:
       // .then() kopyalama başarılıysa, .catch() izin yoksa veya hata varsa çalışır.
       navigator.clipboard.writeText(item.note.text).then(function () {
-        setButtonInfo(copyButton, "Kopyalandi", "✓");
-        showStatusMessage("Not kopyalandi.");
+        setButtonInfo(copyButton, "Kopyalandı", "✓");
+        showStatusMessage("İhtiyaç kopyalandı.");
         setTimeout(function () {
-          setButtonInfo(copyButton, "Notu kopyala", "📋");
+          setButtonInfo(copyButton, "İhtiyacı kopyala", "📋");
         }, 1500);
       }).catch(function () {
         showStatusMessage("Kopyalanamadi.", "danger");
@@ -349,7 +349,7 @@ export function renderNotes(notes, handlers) {
 
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button icon-button";
-    setButtonInfo(deleteButton, "Notu sil", "×");
+    setButtonInfo(deleteButton, "İhtiyacı sil", "×");
     deleteButton.addEventListener("click", function () {
       handlers.onDelete(item.index);
     });

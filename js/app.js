@@ -63,9 +63,9 @@ function togglePinNote(index) {
   saveAndRender();
 
   if (notes[index].isPinned) {
-    showStatusMessage("Not sabitlendi.");
+    showStatusMessage("İhtiyaç sabitlendi.");
   } else {
-    showStatusMessage("Not sabiti kaldirildi.");
+    showStatusMessage("İhtiyaç sabiti kaldırıldı.");
   }
 }
 
@@ -93,7 +93,7 @@ function confirmDelete() {
     cancelEditNote();
     cancelDelete();
     saveAndRender();
-    showStatusMessage("Tum notlar temizlendi.", "danger");
+    showStatusMessage("Tüm ihtiyaçlar temizlendi.", "danger");
     return;
   }
 
@@ -105,7 +105,7 @@ function confirmDelete() {
   cancelEditNote();
   cancelDelete();
   saveAndRender();
-  showStatusMessage("Not silindi.", "danger");
+  showStatusMessage("İhtiyaç silindi.", "danger");
 }
 
 function handleNoteSubmit(event) {
@@ -127,7 +127,7 @@ function handleNoteSubmit(event) {
     notes[noteIndexToEdit].updatedAt = new Date().toISOString();
     cancelEditNote();
     saveAndRender();
-    showStatusMessage("Not guncellendi.");
+    showStatusMessage("İhtiyaç güncellendi.");
     return;
   }
 
@@ -136,7 +136,7 @@ function handleNoteSubmit(event) {
   selectColor("green");
   updateCharacterCount();
   saveAndRender();
-  showStatusMessage("Not eklendi.");
+  showStatusMessage("İhtiyaç eklendi.");
 }
 
 function handleNoteInput() {

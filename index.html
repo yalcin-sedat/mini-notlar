@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini Notlar</title>
+  <title>Dershane (Ev) İhtiyaçları</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,26 +16,26 @@
     <section class="app-header">
       <div>
         <p class="eyebrow">Ilk JavaScript Projem</p>
-        <h1>Mini Notlar</h1>
-        <p class="intro">Kisa notlarini yaz, listele ve daha sonra geri don.</p>
+        <h1>Dershane (Ev) İhtiyaçları</h1>
+      
       </div>
 
       <button id="theme-toggle-button" class="theme-button icon-button" type="button" aria-label="Koyu temaya gec" aria-pressed="false" title="Koyu temaya gec">🌙</button>
     </section>
 
     <section class="note-panel" aria-labelledby="new-note-title">
-      <h2 id="new-note-title">Yeni Not</h2>
+      <h2 id="new-note-title">Yeni İhtiyaç</h2>
 
       <form id="note-form" class="note-form">
-        <label for="note-input">Not metni</label>
-        <textarea id="note-input" name="note" rows="4" maxlength="500" placeholder="Bugun neyi not almak istiyorsun?"></textarea>
+  
+        <textarea id="note-input" name="note" rows="4" maxlength="500" placeholder="Eksik düsündügün ihtiyaclari yaz?"></textarea>
         <div class="input-info">
-          <p id="note-error" class="error-message hidden">Not yazmadiniz.</p>
+          <p id="note-error" class="error-message hidden">Lütfen bir ihtiyaç yazın.</p>
           <span id="character-count">0 / 500</span>
         </div>
 
         <fieldset class="color-picker">
-          <legend>Renk etiketi</legend>
+          <legend></legend>
           <label class="color-option color-option-green">
             <input type="radio" name="note-color" value="green" checked>
             <span>Yesil</span>
@@ -51,7 +51,7 @@
         </fieldset>
 
         <div class="form-actions">
-          <button id="submit-note-button" class="icon-button" type="submit" aria-label="Not ekle" title="Not ekle">+</button>
+          <button id="submit-note-button" class="icon-button" type="submit" aria-label="İhtiyaç ekle" title="İhtiyaç ekle">+</button>
           <button id="cancel-edit-button" class="secondary-button icon-button hidden" type="button" aria-label="Duzenlemeden vazgec" title="Duzenlemeden vazgec">↩️</button>
         </div>
       </form>
@@ -61,16 +61,16 @@
 
     <section class="notes-area" aria-labelledby="notes-title">
       <div class="notes-heading">
-        <h2 id="notes-title">Notlarim</h2>
+        <h2 id="notes-title">İhtiyaçlarımız</h2>
         <div class="notes-tools">
-          <span id="note-count">0 not</span>
+          <span id="note-count">0 ihtiyaç</span>
           <span id="note-stats">0 karakter · 0 kelime</span>
-          <button id="clear-notes-button" class="danger-button small-button icon-button hidden" type="button" aria-label="Tum notlari temizle" title="Tum notlari temizle">🧹</button>
+          <button id="clear-notes-button" class="danger-button small-button icon-button hidden" type="button" aria-label="Tümünü temizle" title="Tümünü temizle">🧹</button>
         </div>
       </div>
 
       <div class="search-area">
-        <label for="search-input">Notlarda ara</label>
+        <label for="search-input">İhtiyaçlarda ara</label>
         <div class="search-row">
           <input id="search-input" type="search" placeholder="Aranacak kelime...">
           <button id="clear-search-button" class="secondary-button small-button icon-button hidden" type="button" aria-label="Aramayi temizle" title="Aramayi temizle">❌</button>
@@ -78,15 +78,15 @@
       </div>
 
       <ul id="notes-list" class="notes-list">
-        <li class="empty-state">Henuz not eklenmedi.</li>
+        <li class="empty-state">Henüz ihtiyaç eklenmedi.</li>
       </ul>
     </section>
   </main>
 
   <div id="delete-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
     <div class="modal-box">
-      <h2 id="delete-modal-title">Not Silinsin mi?</h2>
-      <p>Bu notu silersen geri alamazsin.</p>
+      <h2 id="delete-modal-title">İhtiyaç Silinsin mi?</h2>
+      <p>Bu ihtiyacı silersen geri alamazsın.</p>
 
       <div class="modal-actions">
         <button id="cancel-delete-button" class="secondary-button icon-button" type="button" aria-label="Vazgec" title="Vazgec">↩️</button>
