@@ -320,14 +320,15 @@ export function renderNotes(notes, handlers) {
       item.note.isPinned ? "📍" : "📌"
     );
     pinButton.addEventListener("click", function () {
-      handlers.onTogglePin(item.index);
+      // Eskiden dizi indeksi gönderiliyordu; artık veritabanı ID'si gönderiyoruz.
+      handlers.onTogglePin(item.note.id);
     });
 
     const editButton = document.createElement("button");
     editButton.className = "edit-button icon-button";
     setButtonInfo(editButton, "İhtiyacı düzenle", "✎");
     editButton.addEventListener("click", function () {
-      handlers.onEdit(item.index);
+      handlers.onEdit(item.note.id);
     });
 
     const copyButton = document.createElement("button");
@@ -351,7 +352,7 @@ export function renderNotes(notes, handlers) {
     deleteButton.className = "delete-button icon-button";
     setButtonInfo(deleteButton, "İhtiyacı sil", "×");
     deleteButton.addEventListener("click", function () {
-      handlers.onDelete(item.index);
+      handlers.onDelete(item.note.id);
     });
 
     noteContent.appendChild(noteText);

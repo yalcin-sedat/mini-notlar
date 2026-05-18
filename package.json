@@ -1,0 +1,13 @@
+{
+  "name": "dershane-ihtiyaclari",
+  "version": "1.0.0",
+  "description": "Dershane (Ev) İhtiyaçları - Node.js + Express + SQLite",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "",
+    "better-sqlite3": ""
+  }
+}
